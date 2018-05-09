@@ -1,0 +1,58 @@
+.blue 	{   color: #1F497D;
+            font-size:11.0pt;
+            font-family:'Calibri',sans-serif;
+}
+
+
+
+button {
+    font-size: 12px;
+    width: 60px;
+    height: 20px;
+
+}
+
+.header {
+    min-height: 10vh;
+    display: flex;
+    flex-direction: row;
+    background-color:gold;
+}
+
+.container {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+}
+
+.main {
+    flex: auto;
+    background-color: aqua;
+}
+
+@media (min-width: 540px) {
+    .main-wrapper {
+        flex-direction: row;
+        flex: 1;
+    }
+
+    .sidebar {
+        flex: none;
+        width: 150px;
+    }
+
+    .sidebar-left {
+        order: -1;
+        background-color:darkorange;
+    }
+
+    .main {
+        flex: auto;
+    }
+}
