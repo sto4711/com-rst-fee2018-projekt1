@@ -63,7 +63,7 @@ class View {
         this.table.deleteRow(index);
     }
 
-    static table_getSelectedRowIndex(element) {
+    static tableGetSelectedRowIndex(element) {
         return element.closest('tr').rowIndex;
     }
 

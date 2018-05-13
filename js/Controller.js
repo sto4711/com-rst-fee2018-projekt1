@@ -30,14 +30,14 @@ class Controller {
     registerDeleteEventListener(element) {
         let model = this.model;
         element.onclick = function () {
-            model.deleteTableRow(View.table_getSelectedRowIndex(this));
+            model.deleteTableRow(View.tableGetSelectedRowIndex(this));
         }
     }
 
     registerUpdateEventListener(element) {
         let view = this.view;
         element.onclick = function () {
-            Logger.debugConsole("update row " + View.table_getSelectedRowIndex(this));
+            Logger.debugConsole("update row " + View.tableGetSelectedRowIndex(this));
         }
     }
 
