@@ -1,3 +1,5 @@
+'usestrict';
+
 class View {
     constructor(model,controller) {
         this.model = model;
@@ -6,62 +8,58 @@ class View {
     }
 
     initUI() {
-        this.demoHandlebars();
-        this.table_init();
-    }
-
-    demoHandlebars() {
+        //demo handlebars
         try {
-            var tmpHtml = document.getElementById("myTemplate").innerHTML;
-            var template = Handlebars.compile(tmpHtml);
-            var data = template({name: "Handlebars"});
-            document.getElementById("handlebarsDiv").innerHTML += data;
-            Logger.debugConsole("handlebars DONE");
+            let tmpHtml = document.getElementById("myTemplate").innerHTML;
+            let template = Handlebars.compile(tmpHtml);
+            document.getElementById("handlebarsDiv").innerHTML += template({name: "use handlebars, put vs CORS)"});
         }
         catch (e) {
             Logger.debugConsole(e.toString());
         }
+        this.tableInit();
     }
 
-    table_init() {
-        var header = this.table.createTHead();
-        var row = header.insertRow(0);
-        this.model.tableColNames.forEach(function (colName) {
-            row.insertCell(-1).innerHTML = colName;
-        });
-    }
 
     createButton(caption) {
-        var button = document.createElement("BUTTON");
+        let button = document.createElement("BUTTON");
         button.appendChild(document.createTextNode(caption));
         return button;
     }
 
-    table_addRow(rowJson) {
-        var row = this.table.insertRow(-1);
-        for (var cellIndex = 0; cellIndex < this.model.tableColNames.length; cellIndex++) {
-            var colName = this.model.tableColNames[cellIndex];
-            var cellValue = eval("rowJson." + colName);
-            row.insertCell(-1).innerHTML = cellValue;
+    tableInit() {
+        let header = this.table.createTHead();
+        let row = header.insertRow(0);
+        this.model.TABLE_COL_NAMES.forEach(function (colName) {
+            row.insertCell(-1).innerHTML = colName;
+        });
+    }
+
+
+    tableAddRow(rowJson) {
+        let row = this.table.insertRow(-1);
+        for (let cellIndex = 0; cellIndex < this.model.TABLE_COL_NAMES.length; cellIndex++) {
+            let colName = this.model.TABLE_COL_NAMES[cellIndex];
+            row.insertCell(-1).innerHTML = eval("rowJson." + colName);
         }
 
-        var buttonDelete  = this.createButton("delete");
+        let buttonDelete  = this.createButton("delete");
         this.controller.registerDeleteEventListener(buttonDelete);
         row.insertCell(-1).appendChild(buttonDelete);
 
-        var buttonModify = this.createButton("modify");
+        let buttonModify = this.createButton("modify");
         this.controller.registerUpdateEventListener(buttonModify);
         row.insertCell(-1).appendChild(buttonModify);
     }
 
-    table_dropAllRows() {
-        var table = this.table;
-        for(var i = 1  /* keep header */; i < table.rows.length;) {
-            table.deleteRow(i);
+    tableDeleteAllRows() {
+        let table = this.table;
+        for(let i = 1  /* keep header */; i < table.rows.length;) {
+            table.deleteRow(i);//poor performance
         }
     }
 
-    table_dropRow(index) {
+    tableDeleteRow(index) {
         this.table.deleteRow(index);
     }
 

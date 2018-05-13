@@ -1,32 +1,74 @@
+'usestrict';
+/*
+* JSONP vs cross domain requests, must be padded on rest server !!
+*/
 class Model {
     constructor(controller) {
-        this.tableColNames = ["id", "content", "status", "synced", "created"];
+        this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';//constant
+        this.TABLE_COL_NAMES = ["id", "content", "status", "synced", "created"];
         this.controller = controller;
+        this.rowsJson;
     }
 
-    getTableJson() {
-        /* JSONP vs cross domain requests, must be padded on rest server !! */
-        var self = this;
+    getTableRows() {
+        let myself = this;
         $.ajax({
             type: "GET",
             dataType: "jsonp",
-            url: 'http://localhost:8080/com-rst-fee2018-projekt1-rest/note',
+            url: myself.URL_REST_NOTE + '?corsissue=get=',
             success: function (json) {
-                self.controller.getTableJson_callback(json);
+                myself.rowsJson = json.rows;
+                let jsonStr = JSON.stringify(json);
+                localStorage.setItem("rst4711", jsonStr);
+                myself.controller.getTableJson_callback(json.rows);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.debug("ajax error " + textStatus);
-                throw {
-                    name: "AjaxException",
-                    message: textStatus,
-                    toString: function () {
-                        return this.name + ": " + this.message;
-                    }
-                };
+                myself.onAjaxError(jqXHR, textStatus, errorThrown, "GET");
             },
         });
     }
 
+    putTableRow() {
+        let myself = this;
+        $.ajax({
+            type: "PUT",
+            dataType: "jsonp",
+            url: myself.URL_REST_NOTE + '?corsissue=put',
+            success: function (json) {
+                myself.controller.putTableRowJson_callback(json);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                myself.onAjaxError(jqXHR, textStatus, errorThrown, "PUT");
+            },
+        });
+    }
+
+    deleteTableRow(rowIndex) {
+        let myself = this;
+        let id = this.rowsJson[rowIndex - 1]["id"];//header starts with 0
+        $.ajax({
+            type: "DELETE",
+            dataType: "jsonp",
+            url: myself.URL_REST_NOTE + '?corsissue=delete&id=' + id,
+            success: function (json) {
+                myself.controller.deleteTableRowJson_callback(json);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                myself.onAjaxError(jqXHR, textStatus, errorThrown, "DELETE");
+            },
+        });
+    }
+
+    onAjaxError(jqXHR, textStatus, errorThrown, ajaxMethod) {
+        console.debug("ajax error " + textStatus);
+        throw {
+            name: "AjaxException",
+            message: textStatus,
+            toString: function () {
+                return this.name + ": " + this.message;
+            }
+        };
+    }
 
 };
 

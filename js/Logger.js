@@ -1,3 +1,5 @@
+'usestrict';
+
 class Logger {
     constructor() {
     }
