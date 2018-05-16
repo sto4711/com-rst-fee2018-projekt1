@@ -24,7 +24,7 @@ function findNextSquare(sq) {
 function accum(s) {
     var chars = s.split('');
     var result = "";
-    for (var i = 0; i < chars.length; i++) {
+    for (let i = 0; i < chars.length; i++) {
         var char = chars[i];
         var countLetterToAppend = i + 1;
         for (var appendIndex = 0; appendIndex < (i + 1); appendIndex++) {
@@ -267,6 +267,17 @@ function solution(number) {
 }
 
 function amidakuji(ar){
+    let ladder = [
+        '001001',
+        '010000',
+        '100100',
+        '001000',
+        '100101',
+        '010010',
+        '101001',
+        '010100'
+    ];
+
     let indexes = {};
     indexes["indexDigit1"] = 0;
     indexes["indexDigit2"] = 0;
@@ -277,31 +288,82 @@ function amidakuji(ar){
 
     ar.forEach(function (ladderChunk) {
         let rungsEmptyspaces = ladderChunk.split('');
-
-
         console.debug("next "+ rungsEmptyspaces);
     });
-
-    console.debug(JSON.stringify(indexes));
 }
 
+function toBitArray(num) {
+    let result = num.toString(2).split('');
+    return result;
+}
 
-let ladder = [
-    '001001',
-    '010000',
-    '100100',
-    '001000',
-    '100101',
-    '010010',
-    '101001',
-    '010100'
-];
+function arrayJSON_sortByTwoKeys(array, key1, key2) {
+    return array.sort(function(a, b) {
+        var value = a[key1];
+        var valueNext = b[key1];
+        var value2 = a[key2];
+        var value2Next = b[key2];
 
- console.debug("amidakuji(ladder); expected: [4, 2, 0, 5, 3, 6, 1], result " + amidakuji(ladder));
+        if(value < valueNext)    {
+            return -1;
+        } else if(value > valueNext)    {
+            return 1;
+        }else if (value == valueNext)  {
+            if(value2 < value2Next)    {
+                return -1;
+            }else if (value2 > value2Next) {
+                return 1;
+            }
+            else    {
+                return 0;
+            }
+        }
+    });
+}
+
+function sortByBit(arr) {
+    let numBitarrayCountsingles = [];
+    let result = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        let num = arr[i];
+        let bitArray = toBitArray(num);
+        let countSingles = 0;
+        let bitArray_countSingles = {};
+        bitArray.forEach(function (numBit) {
+            if(numBit==1)    {
+                countSingles++;
+            }
+        });
+        bitArray_countSingles["num"] = num;
+        bitArray_countSingles["bitArray"] = bitArray;
+        bitArray_countSingles["countSingles"] = countSingles;
+        numBitarrayCountsingles.push(bitArray_countSingles);
+    }
+    arrayJSON_sortByTwoKeys(numBitarrayCountsingles, "countSingles","num");
+    //console.debug(JSON.stringify(numBitarrayCountsingles));
+
+    for (let i = 0; i < numBitarrayCountsingles.length; i++) {
+        let numBitarrayCountsingle = numBitarrayCountsingles[i];
+        //console.debug(JSON.stringify(numBitarrayCountsingle));
+        arr[i] =  numBitarrayCountsingle["num"];
+    }
+    //arr = result;
+}
+
+//console.debug( sortByBit([9,4]));
+let arr = [3, 8, 3, 6, 5, 7, 9, 1];
+sortByBit(arr);
+console.debug(arr);
+
+
+
+//console.debug("sortByBit([3, 8, 3, 6, 5, 7, 9, 1]); expected: [1, 8, 3, 3, 5, 6, 9, 7], result " + sortByBit([3, 8, 3, 6, 5, 7, 9, 1]));
+//console.debug("sortByBit([9,4,5,3,5,7,2,56,8,2,6,8,0]); expected: [0, 2, 2, 4, 8, 8, 3, 5, 5, 6, 9, 7, 56)], result " + sortByBit([9,4,5,3,5,7,2,56,8,2,6,8,0]));
+
+//console.debug("amidakuji(ladder); expected: [4, 2, 0, 5, 3, 6, 1], result " + amidakuji(ladder));
 //console.debug("solution(10); expected: 23, result " + solution(10));
 //console.debug("solution(10); expected: 23, result " + solution(100000));
-
-
 //findOdd([1,1,1,1,1,1,10,1,1,1,1]);
 //findOdd([ 20, 1, 1, 2, 2, 3, 3, 5, 5, 4, 20, 4, 5 ]
 //duplicateEncode("din"); //"((("

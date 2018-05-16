@@ -11,19 +11,18 @@ class Model {
     }
 
     getTableRows() {
-        let myself = this;
         $.ajax({
             type: "GET",
             dataType: "jsonp",
-            url: myself.URL_REST_NOTE + '?corsissue=get=',
-            success: function (json) {
-                myself.rowsJson = json.rows;
+            url: this.URL_REST_NOTE + '?corsissue=get=',
+            success:  (json) => {
+                this.rowsJson = json.rows;
                 let jsonStr = JSON.stringify(json);
                 localStorage.setItem("rst4711", jsonStr);
-                myself.controller.getTableJson_callback(json.rows);
+                this.controller.getTableJson_callback(json.rows);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                myself.onAjaxError(jqXHR, textStatus, errorThrown, "GET");
+            error: (jqXHR, textStatus, errorThrown)=>  {
+                this.onAjaxError(jqXHR, textStatus, errorThrown, "GET");
             },
         });
     }
