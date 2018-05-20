@@ -2,44 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <link rel='stylesheet' media='screen' href='css/screen.css'>
     <script src='./js/handlebars-v4.0.11.js'></script>
     <script src='./js/jquery-3.3.1.min.js'></script>
-    <script src='./js/Logger.js' ></script>
-    <script src='./js/Model.js' ></script>
-    <script src='./js/View.js' ></script>
-    <script src='./js/Controller.js' ></script>
-
+    <script src='./js/Logger.js'></script>
+    <script src='./js/Model.js'></script>
+    <script src='./js/View.js'></script>
+    <script src='./js/Controller.js'></script>
     <title>Notes</title>
 </head>
-<body class='blue' onLoad="new Controller();">
+<body class='body' onLoad="myController = new Controller();">
 
 
-<div class="grid-container">
-    <header class="header">
-        <h1>Notes</h1>
-    </header>
-
-    <div class="main-wrapper">
-        <main class="main">
-                <table id='noteTable' border="1px"></table>
-        </main>
-        <div class="sidebar sidebar-left">
-            <button id= "searchButton" class="button">search</button>
-            <br>
-            <button id= "addRecordButton" >add</button>
-            <br>
-            <button id= "clearButton" >clear</button>
-        </div>
-        <div class="sidebar sidebar-right">Right Sidebar</div>
+<header class="header" role="banner">
+    <h1 class="headerTitle">Notes</h1>
+    <div class="wrapperButton">
+        <button id="searchButton" class="buttonNormal">search</button>
+        <button id="addRecordButton" class="buttonNormal">add</button>
+        <button id="clearButton" class="buttonNormal">clear</button>
     </div>
 
-    <footer class="footer">
-        <div id="handlebarsDiv">
-            <script id="myTemplate" type="text/x-handlebars-template">{{name}}</script>
-        </div>
-    </footer>
-</div>
+    <div class="wrapperOrderBy">
+        <input type="radio" id="radioByFinished"
+               name="contact" value="email" checked="checked">
+        <label for="radioByFinished">By finish Date</label>
+
+        <input type="radio" id="radioByCreated"
+               name="contact" value="phone">
+        <label for="radioByCreated">By created Date</label>
+
+        <input type="radio" id="radioByImportance"
+               name="contact" value="mail">
+        <label for="radioByImportance">By Importance</label>
+    </div>
+
+    <div class="wrapperFilter">
+        <input type="checkbox" id="checkboxFinished">
+        <label for="checkboxFinished">Finished</label>
+    </div>
+</header>
+
+
+<nav class="nav" role="navigation">Navigation
+</nav>
+
+<main class="main" role="main">
+    <table id='noteTable' class="table"></table>
+</main>
+
+<aside class="aside" role="complementary">
+</aside>
+
+<footer class="footer" role="contentinfo">
+    <div id="handlebarsDiv">
+        <script id="myTemplate" type="text/x-handlebars-template">{{name}}</script>
+    </div>
+</footer>
+
+<dialog id="editDialog" class="editDialog" open>
+    <div id="editDialogDiv">
+        <form name="myform" action="javascript:myController.editDialogOkPressed();">
+        <table>
+            <tr>
+                <td>Title</td>
+                <td>
+                    <input id="inputTitle" type="text" required>
+                </td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>
+                    <textarea id="inputDescription" rows="4" cols="50" required></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>Importance</td>
+                <td>
+                    <input id="inputImportance" type="range" min="1" max="5" step="1" value="1"/>
+            </tr>
+            <tr>
+                <td>Completed by</td>
+                <td>
+                    <input id="inputCompletedDate" type="date" value="2013-01-08" required>
+                </td>
+            </tr>
+        </table>
+          <input name="Submit"  type="submit" value="Save"/>
+        </form>
+
+
+    </div>
+    <div class="wrapperButton">
+        <button id="editDialogOkButton" class="buttonNormal">ok</button>
+        <button id="editDialogCancelButton" class="buttonNormal">cancel</button>
+    </div>
+</dialog>
 
 
 </body>

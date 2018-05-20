@@ -1,7 +1,5 @@
 'usestrict';
-/*
-* JSONP vs cross domain requests, must be padded on rest server !!
-*/
+
 class Model {
     constructor(controller) {
         this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';//constant
@@ -13,8 +11,8 @@ class Model {
     getTableRows() {
         $.ajax({
             type: "GET",
-            dataType: "jsonp",
-            url: this.URL_REST_NOTE + '?corsissue=get=',
+            dataType: "json",
+            url: this.URL_REST_NOTE,
             success:  (json) => {
                 this.rowsJson = json.rows;
                 let jsonStr = JSON.stringify(json);
@@ -28,32 +26,35 @@ class Model {
     }
 
     putTableRow() {
-        let myself = this;
         $.ajax({
             type: "PUT",
-            dataType: "jsonp",
-            url: myself.URL_REST_NOTE + '?corsissue=put',
-            success: function (json) {
-                myself.controller.putTableRowJson_callback(json);
+            dataType: "json",
+            url: this.URL_REST_NOTE,
+            success: (json) => {
+                this.controller.putTableRowJson_callback(json);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                myself.onAjaxError(jqXHR, textStatus, errorThrown, "PUT");
+            error: (jqXHR, textStatus, errorThrown) =>{
+                this.onAjaxError(jqXHR, textStatus, errorThrown, "PUT");
             },
         });
     }
 
     deleteTableRow(rowIndex) {
-        let myself = this;
-        let id = this.rowsJson[rowIndex - 1]["id"];//header starts with 0
+        let id = this.rowsJson[rowIndex]["id"];
+        Logger.debugConsole("id " + id);
+
         $.ajax({
             type: "DELETE",
-            dataType: "jsonp",
-            url: myself.URL_REST_NOTE + '?corsissue=delete&id=' + id,
-            success: function (json) {
-                myself.controller.deleteTableRowJson_callback(json);
+            url: this.URL_REST_NOTE ,
+            /* like SOAP into request body */
+            data : {"id" : id
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                myself.onAjaxError(jqXHR, textStatus, errorThrown, "DELETE");
+            url: this.URL_REST_NOTE,
+            success: (json) =>{
+                this.controller.deleteTableRowJson_callback(json);
+            },
+            error: (jqXHR, textStatus, errorThrown)=> {
+                this.onAjaxError(jqXHR, textStatus, errorThrown, "DELETE");
             },
         });
     }

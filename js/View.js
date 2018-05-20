@@ -5,6 +5,11 @@ class View {
         this.model = model;
         this.controller = controller;
         this.table = document.getElementById("noteTable");
+        this.editDialog = document.getElementById("editDialog");
+        this.inputTitle = document.getElementById("inputTitle");
+        this.inputDescription = document.getElementById("inputDescription");
+        this.inputImportance = document.getElementById("inputImportance");
+        this.inputCompletedDate = document.getElementById("inputCompletedDate");
     }
 
     initUI() {
@@ -12,12 +17,21 @@ class View {
         try {
             let tmpHtml = document.getElementById("myTemplate").innerHTML;
             let template = Handlebars.compile(tmpHtml);
-            document.getElementById("handlebarsDiv").innerHTML += template({name: "use handlebars, put vs CORS)"});
+            document.getElementById("handlebarsDiv").innerHTML += template({name: "rst 06.2018 CAS FEE Project 1 "});
         }
         catch (e) {
             Logger.debugConsole(e.toString());
         }
-        this.tableInit();
+
+        this.editDialog.addEventListener("close", function(e) {
+            Logger.debugConsole("dialog closed");
+        }, false);
+
+        this.inputCompletedDate.oninvalid = function(event) {
+            event.target.setCustomValidity('blabla');
+        }
+
+
     }
 
 
@@ -27,7 +41,7 @@ class View {
         return button;
     }
 
-    tableInit() {
+    tableAddHeader() {
         let header = this.table.createTHead();
         let row = header.insertRow(0);
         this.model.TABLE_COL_NAMES.forEach(function (colName) {
@@ -35,27 +49,38 @@ class View {
         });
     }
 
+    createNoteItem(rowJson) {
+        let item = document.createElement("TABLE");
+        let buttonDelete  = this.createButton("-");
+        let buttonModify = this.createButton("m");
+        let row = item.insertRow(-1);
+        let buttonDiv = document.createElement("DIV");
+
+        this.controller.registerDeleteEventListener(buttonDelete);
+        this.controller.registerUpdateEventListener(buttonModify);
+        buttonDelete.className  = 'buttonImage';
+        buttonModify.className  = 'buttonImage';
+        item.className  = 'tableItem';
+        row.insertCell(-1).innerHTML = "wann";
+        row.insertCell(-1).innerHTML = "note title";
+        row.insertCell(-1).innerHTML = "importance";
+        row = item.insertRow(-1);
+        row.insertCell(-1).innerHTML = "finished";
+        row.insertCell(-1).innerHTML = "liste";
+        buttonDiv.appendChild(buttonDelete);
+        buttonDiv.appendChild(buttonModify);
+        row.insertCell(-1).appendChild(buttonDiv);
+        return item;
+    }
 
     tableAddRow(rowJson) {
         let row = this.table.insertRow(-1);
-        for (let cellIndex = 0; cellIndex < this.model.TABLE_COL_NAMES.length; cellIndex++) {
-            let colName = this.model.TABLE_COL_NAMES[cellIndex];
-            row.insertCell(-1).innerHTML = eval("rowJson." + colName);
-        }
-
-        let buttonDelete  = this.createButton("delete");
-        this.controller.registerDeleteEventListener(buttonDelete);
-        row.insertCell(-1).appendChild(buttonDelete);
-
-        let buttonModify = this.createButton("modify");
-        this.controller.registerUpdateEventListener(buttonModify);
-        row.insertCell(-1).appendChild(buttonModify);
+        row.insertCell(-1).appendChild(this.createNoteItem());
     }
 
     tableDeleteAllRows() {
-        let table = this.table;
-        for(let i = 1  /* keep header */; i < table.rows.length;) {
-            table.deleteRow(i);//poor performance
+        for(let i = 0; i < this.table.rows.length;) {
+            this.table.deleteRow(i);//poor performance
         }
     }
 
@@ -63,9 +88,21 @@ class View {
         this.table.deleteRow(index);
     }
 
+    showEditDialog(index) {
+        this.editDialog.showModal();
+    }
+
+    closeEditDialog(index) {
+        this.editDialog.close();
+    }
+
     static tableGetSelectedRowIndex(element) {
         return element.closest('tr').rowIndex;
     }
+
+
+
+
 
 
 }

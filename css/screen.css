@@ -1,58 +1,108 @@
-.blue 	{   color: #1F497D;
-            font-size:11.0pt;
-            font-family:'Calibri',sans-serif;
+:root {
+    --myBlue: #01B5E7;
 }
 
+.body {
+    display: flex;
+    flex-wrap: wrap;
 
-
-button {
-    font-size: 12px;
-    width: 60px;
-    height: 20px;
+    font-size: 11.0pt;
+    font-family: 'Calibri', sans-serif;
 
 }
 
 .header {
-    min-height: 10vh;
-    display: flex;
-    flex-direction: row;
-    background-color:gold;
+    flex-basis: 100%;
 }
 
-.container {
-    min-height: 90vh;
-    display: flex;
-    flex-direction: column;
+.headerTitle {
+    text-align: center;
 }
 
-.main-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex: auto;
+.nav {
+    flex-grow: 1;
+    background: mediumturquoise;
 }
 
 .main {
-    flex: auto;
-    background-color: aqua;
+    flex-grow: 3;
 }
 
-@media (min-width: 540px) {
-    .main-wrapper {
-        flex-direction: row;
-        flex: 1;
-    }
-
-    .sidebar {
-        flex: none;
-        width: 150px;
-    }
-
-    .sidebar-left {
-        order: -1;
-        background-color:darkorange;
-    }
-
-    .main {
-        flex: auto;
-    }
+.aside {
+    flex-grow: 1;
+    background: orange;
 }
+
+.footer {
+    flex-basis: 100%;
+    text-align: right;
+    color: var(--myBlue);
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+.buttonNormal {
+    font-size: 12px;
+    width: 60px;
+    height: 20px;
+    margin: 1px;
+}
+
+.buttonImage {
+    font-size: 12px;
+    width: 30px;
+    height: 19px;
+
+}
+
+.wrapperButton {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.wrapperOrderBy {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.wrapperFilter {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.table {
+    border: 0px solid;
+    width: 100%;
+}
+
+.tableItem {
+    border: 0px solid  orange;
+    width: 100%;
+}
+
+.tableItem td:nth-child(1){
+    width:70px;
+    background-color: blue;
+
+}
+
+.tableItem td:nth-child(2){
+    min-width:100px;
+    background-color: yellow;
+
+}
+.tableItem td:nth-child(3){
+    width:50px;
+    background-color: orange;
+}
+
+.editDialog::backdrop {
+    background: rgba(66, 244, 66, 0.1);
+}
+
