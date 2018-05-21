@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta charset="UTF-8">
-    <link rel='stylesheet' media='screen' href='css/screen.css'>
-    <script src='./js/handlebars-v4.0.11.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='css/screen.css'>
     <script src='./js/jquery-3.3.1.min.js'></script>
     <script src='./js/Logger.js'></script>
     <script src='./js/Model.js'></script>
@@ -12,57 +12,49 @@
     <script src='./js/Controller.js'></script>
     <title>Notes</title>
 </head>
-<body class='body' onLoad="myController = new Controller();">
-
+<body class='body' onbeforeunload="return 'are you sure?';" onLoad="myController = new Controller();">
 
 <header class="header" role="banner">
-    <h1 class="headerTitle">Notes</h1>
-    <div class="wrapperButton">
-        <button id="searchButton" class="buttonNormal">search</button>
-        <button id="addRecordButton" class="buttonNormal">add</button>
-        <button id="clearButton" class="buttonNormal">clear</button>
+    <div class="wrapperInfo">
+        rst 06.2018 CAS FEE Project 1
+    </div>
+    <div class="wrapperToggleStyle">
+        <button id="changeStyleButton" class="fa fa-paint-brush"></button>
     </div>
 
+    <h1 class="headerTitle">Notes</h1>
+    <div class="wrapperButton">
+        <button id="addRecordButton" class="fa fa-calendar-plus-o"></button>
+    </div>
     <div class="wrapperOrderBy">
         <input type="radio" id="radioByFinished"
                name="contact" value="email" checked="checked">
         <label for="radioByFinished">By finish Date</label>
-
         <input type="radio" id="radioByCreated"
                name="contact" value="phone">
         <label for="radioByCreated">By created Date</label>
-
         <input type="radio" id="radioByImportance"
                name="contact" value="mail">
         <label for="radioByImportance">By Importance</label>
     </div>
-
     <div class="wrapperFilter">
-        <input type="checkbox" id="checkboxFinished">
-        <label for="checkboxFinished">Finished</label>
+        <input id="finishedCheckbox" type="checkbox" id="checkboxFinished" >
+        <label for="checkboxFinished">finished</label>
     </div>
 </header>
 
-
-<nav class="nav" role="navigation">Navigation
-</nav>
+<nav class="nav" role="navigation"></nav>
 
 <main class="main" role="main">
     <table id='noteTable' class="table"></table>
 </main>
 
-<aside class="aside" role="complementary">
-</aside>
+<aside class="aside" role="complementary"></aside>
 
-<footer class="footer" role="contentinfo">
-    <div id="handlebarsDiv">
-        <script id="myTemplate" type="text/x-handlebars-template">{{name}}</script>
-    </div>
-</footer>
+<footer class="footer" role="contentinfo"></footer>
 
-<dialog id="editDialog" class="editDialog" open>
-    <div id="editDialogDiv">
-        <form name="myform" action="javascript:myController.editDialogOkPressed();">
+<dialog id="editDialog" class="editDialog">
+    <form name="myform" action="javascript:myController.editDialogOkPressed();">
         <table>
             <tr>
                 <td>Title</td>
@@ -84,19 +76,16 @@
             <tr>
                 <td>Completed by</td>
                 <td>
-                    <input id="inputCompletedDate" type="date" value="2013-01-08" required>
+                    <input id="inputCompletedBy" type="date" value="2013-01-08" required>
                 </td>
             </tr>
         </table>
-          <input name="Submit"  type="submit" value="Save"/>
-        </form>
-
-
-    </div>
-    <div class="wrapperButton">
-        <button id="editDialogOkButton" class="buttonNormal">ok</button>
-        <button id="editDialogCancelButton" class="buttonNormal">cancel</button>
-    </div>
+        <menu>
+            <button id="editDialogSubmitButton" type="submit" class="fa fa-check-square-o"></button>
+            <button id="editDialogResetButton" type="reset" class="fa fa-eraser"></button>
+            <button id="editDialogCancelButton" type="reset" class="fa fa-close"></button>
+        </menu>
+    </form>
 </dialog>
 
 

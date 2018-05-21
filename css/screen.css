@@ -1,5 +1,9 @@
 :root {
-    --myBlue: #01B5E7;
+    --baseColorStyle1: #01B5E7;
+    --baseColorStyle2: black;
+    --baseColor: var(--baseColorStyle1);
+    --baseColorHover: orange;
+    --baseButtonFontSize: 24px;
 }
 
 .body {
@@ -8,7 +12,7 @@
 
     font-size: 11.0pt;
     font-family: 'Calibri', sans-serif;
-
+    color: var(--baseColor);
 }
 
 .header {
@@ -25,51 +29,66 @@
 }
 
 .main {
-    flex-grow: 3;
+    flex-grow: 5;
 }
 
 .aside {
-    flex-grow: 1;
-    background: orange;
+    flex-grow: 0;
 }
 
 .footer {
     flex-basis: 100%;
-    text-align: right;
-    color: var(--myBlue);
-    padding-bottom: 3px;
-    padding-top: 3px;
 }
 
-.buttonNormal {
-    font-size: 12px;
-    width: 60px;
-    height: 20px;
-    margin: 1px;
+button {
+    border: none;
+    background-color: transparent;
+    color: var(--baseColor);
 }
 
-.buttonImage {
-    font-size: 12px;
-    width: 30px;
-    height: 19px;
-
+button:hover {
+    color: var(--baseColorHover);
 }
 
-.wrapperButton {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 5px;
-    padding-top: 5px;
+#addRecordButton,
+#editDialogResetButton,
+#editDialogCancelButton,
+#editDialogSubmitButton {
+    font-size: var(--baseButtonFontSize);
 }
 
-.wrapperOrderBy {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 5px;
-    padding-top: 5px;
+.tableItem button {
+    font-size: var(--baseButtonFontSize);
 }
 
-.wrapperFilter {
+.tableItem button:hover {
+    color: var(--baseColorHover);
+}
+
+/* flash */
+.tableItem i {
+    font-size: var(--baseButtonFontSize);
+    color: gold;
+}
+
+#changeStyleButton {
+    font-size: 16px;
+}
+
+.wrapperInfo {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+.wrapperToggleStyle {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.wrapperButton,
+.wrapperOrderBy,
+.wrapperFilter{
     display: flex;
     justify-content: center;
     padding-bottom: 5px;
@@ -77,29 +96,43 @@
 }
 
 .table {
-    border: 0px solid;
     width: 100%;
 }
 
 .tableItem {
-    border: 0px solid  orange;
+    border: 2px solid darkgrey;
     width: 100%;
+    table-layout: fixed;
 }
 
-.tableItem td:nth-child(1){
-    width:70px;
-    background-color: blue;
-
+/* column 1 */
+.tableItem td:nth-child(1) {
+    width: 80px;
 }
 
-.tableItem td:nth-child(2){
-    min-width:100px;
-    background-color: yellow;
-
+/* column 2 */
+.tableItem td:nth-child(2) {
+    min-width: 100px;
+    word-wrap:break-word;
 }
-.tableItem td:nth-child(3){
-    width:50px;
-    background-color: orange;
+
+/* column 3 */
+.tableItem td:nth-child(3) {
+    width: 110px;
+}
+
+/* first rows */
+.tableItem tr:nth-child(1) {
+    height: 50px;
+}
+
+/* second rows */
+.tableItem tr:nth-child(2) {
+    height: 100px;
+}
+
+.editDialog {
+    color: var(--baseColor);
 }
 
 .editDialog::backdrop {
