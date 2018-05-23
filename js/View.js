@@ -6,6 +6,8 @@ class View {
         this.controller = controller;
         this.table = document.getElementById("noteTable");
         this.editDialog = document.getElementById("editDialog");
+        this.errorDialog = document.getElementById("errorDialog");
+        this.errorDialogMessage = document.getElementById("errorDialogMessage");
         this.inputTitle = document.getElementById("inputTitle");
         this.inputDescription = document.getElementById("inputDescription");
         this.inputImportance = document.getElementById("inputImportance");
@@ -77,8 +79,18 @@ class View {
         this.editDialog.showModal();
     }
 
+    showErrorDialog(message) {
+        this.errorDialogMessage.innerHTML = message;
+        this.errorDialog.showModal();
+    }
+
+
     closeEditDialog() {
         this.editDialog.close();
+    }
+
+    closeErrorDialog() {
+        this.errorDialog.close();
     }
 
     switchStyle() {

@@ -7,6 +7,7 @@
     <link rel='stylesheet' href='css/screen.css'>
     <script src='./js/jquery-3.3.1.min.js'></script>
     <script src='./js/Logger.js'></script>
+    <script src='./js/ARestCaller.js'></script>
     <script src='./js/Model.js'></script>
     <script src='./js/View.js'></script>
     <script src='./js/Controller.js'></script>
@@ -16,7 +17,7 @@
 
 <header class="header" role="banner">
     <div class="wrapperInfo">
-        rst 06.2018 CAS FEE Project 1
+        rst 06.2018 CAS FEE Project 1. Awesome Font ok, showMondial-Issue Firefox
     </div>
     <div class="wrapperToggleStyle">
         <button id="changeStyleButton" class="fa fa-paint-brush"></button>
@@ -38,7 +39,7 @@
         <label for="radioByImportance">By Importance</label>
     </div>
     <div class="wrapperFilter">
-        <input id="finishedCheckbox" type="checkbox" id="checkboxFinished" >
+        <input id="finishedCheckbox" type="checkbox" id="checkboxFinished">
         <label for="checkboxFinished">finished</label>
     </div>
 </header>
@@ -86,6 +87,13 @@
             <button id="editDialogCancelButton" type="reset" class="fa fa-close"></button>
         </menu>
     </form>
+</dialog>
+
+<dialog id="errorDialog">
+    <p id="errorDialogMessage">Greetings, one and all!</p>
+    <menu>
+        <button id="errorDialogSubmitButton" type="submit" class="fa fa-check-square-o"></button>
+    </menu>
 </dialog>
 
 

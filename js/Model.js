@@ -1,14 +1,27 @@
 'usestrict';
 
+
+class RestCallerGET extends ARestCaller {
+    /*  must be be overridden */
+    getAjaxType() {
+        return "GET";
+    }
+}
+
 class Model {
     constructor(controller) {
         this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';
         this.TABLE_COL_NAMES = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
         this.controller = controller;
         this.rowsJson;
+        this.restCallerGET = new RestCallerGET();
+        this.restCallerGET.onSuccess = function (json) { /* override */
+            Logger.debugConsole("RestCallerGET-onSuccess()");
+        };
     }
 
     getTableRows() {
+        //this.restCaller.doRestCall(dataJson);
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -137,6 +150,8 @@ class Model {
 
     onAjaxError(jqXHR, textStatus, errorThrown, ajaxMethod) {
         console.debug("ajax error " + textStatus);
+        this.controller.view.showErrorDialog("There's an issue with the backend, please contact IT");
+        /*
         throw {
             name: "AjaxException",
             message: textStatus,
@@ -144,6 +159,7 @@ class Model {
                 return this.name + ": " + this.message;
             }
         };
+        */
     }
 
 

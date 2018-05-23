@@ -16,6 +16,11 @@ class Controller {
             this.view.closeEditDialog();
         }
 
+        document.getElementById("errorDialogSubmitButton").onclick = () =>{
+            this.view.closeErrorDialog();
+        }
+
+
         document.getElementById("changeStyleButton").onclick = () =>{
             this.view.switchStyle();
         }
