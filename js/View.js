@@ -2,6 +2,7 @@
 
 class View {
     constructor(model, controller) {
+        this.LOCAL_STORAGE_STYLE = "com.rst.note.style";
         this.model = model;
         this.controller = controller;
         this.table = document.getElementById("noteTable");
@@ -12,7 +13,7 @@ class View {
         this.inputDescription = document.getElementById("inputDescription");
         this.inputImportance = document.getElementById("inputImportance");
         this.inputCompletedBy = document.getElementById("inputCompletedBy");
-        this.isStyle1 = true;
+        this.setStyle();
     }
 
     createNoteItem(rowJson) {
@@ -76,12 +77,20 @@ class View {
     }
 
     showEditDialog() {
-        this.editDialog.showModal();
+        try {
+            this.editDialog.showModal();
+        }catch (e) {
+            this.editDialog.open();
+        }
     }
 
     showErrorDialog(message) {
         this.errorDialogMessage.innerHTML = message;
-        this.errorDialog.showModal();
+        try {
+            this.errorDialog.showModal();
+        }catch (e) {
+            this.errorDialog.open();
+        }
     }
 
 
@@ -93,12 +102,17 @@ class View {
         this.errorDialog.close();
     }
 
-    switchStyle() {
+    setStyle() {
         let root = document.querySelector(':root');
         let baseColorStyle1 = window.getComputedStyle(root).getPropertyValue('--baseColorStyle1');
         let baseColorStyle2 = window.getComputedStyle(root).getPropertyValue('--baseColorStyle2');
-        root.style.setProperty("--baseColor", (this.isStyle1 ? baseColorStyle2 : baseColorStyle1));
-        this.isStyle1 = (this.isStyle1 ? false : true);
+        let currentStyle = (localStorage.getItem(this.LOCAL_STORAGE_STYLE)==null? "style1": localStorage.getItem(this.LOCAL_STORAGE_STYLE));
+        root.style.setProperty("--baseColor", (currentStyle == "style1" ? baseColorStyle1 : baseColorStyle2));
+    }
+
+    toggleStyle() {
+        let currentStyle = localStorage.getItem(this.LOCAL_STORAGE_STYLE);
+        localStorage.setItem(this.LOCAL_STORAGE_STYLE,  (currentStyle == "style1" ? "style2" : "style1"));
     }
 
     setStyleToggleIsFinished(togglebutton, isFinished) {

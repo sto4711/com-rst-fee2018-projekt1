@@ -8,6 +8,13 @@ class RestCallerGET extends ARestCaller {
     }
 }
 
+class RestCallerPUT extends ARestCaller {
+    /*  must be be overridden */
+    getAjaxType() {
+        return "PUT";
+    }
+}
+
 class Model {
     constructor(controller) {
         this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';
@@ -15,13 +22,15 @@ class Model {
         this.controller = controller;
         this.rowsJson;
         this.restCallerGET = new RestCallerGET();
-        this.restCallerGET.onSuccess = function (json) { /* override */
-            Logger.debugConsole("RestCallerGET-onSuccess()");
+        this.restCallerGET.onSuccess =  (json) =>  { /* inner class, override */
+            this.rowsJson = json.rows;
+            this.controller.getTableJson_callback(this.rowsJson);
         };
     }
 
     getTableRows() {
-        //this.restCaller.doRestCall(dataJson);
+        this.restCallerGET.doRestCall();
+        /*
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -36,6 +45,7 @@ class Model {
                 this.onAjaxError(jqXHR, textStatus, errorThrown, "GET");
             },
         });
+        */
     }
 
     getSelectedRows(finished) {

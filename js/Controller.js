@@ -22,7 +22,8 @@ class Controller {
 
 
         document.getElementById("changeStyleButton").onclick = () =>{
-            this.view.switchStyle();
+            this.view.toggleStyle();
+            this.view.setStyle();
         }
 
         document.getElementById("finishedCheckbox").onclick = () =>{
@@ -55,6 +56,7 @@ class Controller {
 
     addDeleteEventListener(element) {
         element.onclick = () => {
+            element.onClick = null;
             this.model.deleteTableRow(element.idRow);
         }
     }
@@ -108,4 +110,3 @@ class Controller {
 
 }
 
-let myController;
