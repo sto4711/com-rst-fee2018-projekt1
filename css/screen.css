@@ -141,3 +141,63 @@ dialog::backdrop {
     background: rgba(66, 244, 66, 0.1);
 }
 
+.noteItem {
+    min-width: 300px;
+    min-height: 100px;
+    background-color: deepskyblue;
+    margin: 5px;
+    padding: 5px;
+}
+.noteItemContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 300px;
+    min-height: 100px;
+    background-color: deepskyblue;
+    margin: 5px;
+    padding: 5px;
+}
+.noteItem_IsFinished {
+    display: flex;
+    background-color: green;
+    min-width: 30px;
+    min-height: 20px;
+    padding: 5px;
+    margin: 5px;
+}
+.noteItem_Title {
+    display: flex;
+    background-color: aqua;
+    min-width: 30px;
+    min-height: 40px;
+    padding: 5px;
+    margin: 5px;
+}
+.noteItem_Rating {
+    display: flex;
+    min-width: 30px;
+    min-height: 40px;
+    padding: 5px;
+    margin: 5px;
+}
+.noteItem_CreatedDate {
+    display: flex;
+    background-color: greenyellow;
+    min-width: 30px;
+    min-height: 40px;
+    padding: 5px;
+    margin: 5px;
+}
+.noteItem_Description {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    background-color: darkorange;
+    width: 30px;
+    min-height: 40px;
+    padding: 5px;
+    margin: 5px;
+}
+
+
