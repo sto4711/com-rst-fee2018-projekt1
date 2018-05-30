@@ -194,7 +194,6 @@ dialog::backdrop {
     flex: 1;
     flex-wrap: wrap;
     background-color: darkorange;
-    width: 30px;
     min-height: 40px;
     padding: 5px;
     margin: 5px;

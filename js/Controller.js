@@ -1,5 +1,3 @@
-'usestrict';
-
 class Controller {
     constructor() {
         this.model = new Model(this);
@@ -9,39 +7,39 @@ class Controller {
     }
 
     registerEventListener() {
-        document.getElementById("addRecordButton").addEventListener('click', (event) => {
+        document.getElementById("addRecordButton").addEventListener('click', () => {
             this.view.showEditDialog();
         });
 
-        document.getElementById("editDialogCancelButton").addEventListener('click', (event) => {
+        document.getElementById("editDialogCancelButton").addEventListener('click', () => {
             this.view.closeEditDialog();
         });
 
-        document.getElementById("errorDialogSubmitButton").addEventListener('click', (event) => {
+        document.getElementById("errorDialogSubmitButton").addEventListener('click', () => {
             this.view.closeErrorDialog();
         });
 
-        document.getElementById("changeStyleButton").addEventListener('click', (event) => {
+        document.getElementById("changeStyleButton").addEventListener('click', () => {
             this.view.toggleStyle();
             this.view.setStyle();
 
         });
 
-        document.getElementById("finishedCheckbox").addEventListener('click', (event) => {
+        document.getElementById("finishedCheckbox").addEventListener('click', () => {
             this.reloadTable();
         });
 
-        document.getElementById("radioByFinished").addEventListener('click', (event) => {
+        document.getElementById("radioByFinished").addEventListener('click', () => {
             this.model.sortByFinished();
             this.reloadTable();
         });
 
-        document.getElementById("radioByCreated").addEventListener('click', (event) => {
+        document.getElementById("radioByCreated").addEventListener('click', () => {
             this.model.sortByCreated();
             this.reloadTable();
         });
 
-        document.getElementById("radioByImportance").addEventListener('click', (event) => {
+        document.getElementById("radioByImportance").addEventListener('click', () => {
             this.model.sortByImportance();
             this.reloadTable();
         });
@@ -58,26 +56,25 @@ class Controller {
     addDeleteEventListener(element) {
         element.addEventListener("click", (event) => {
             //element.removeEventListener("click"); will be handled by bubbling
-//            this.model.deleteTableRow(element.idRow);
             this.model.deleteTableRow(event.target.idRow);
         });
     }
 
     addUpdateEventListener(element) {
-        element.addEventListener("click", (event) => {
+        element.addEventListener("click", () => {
             Logger.debugConsole("update row " + element.idRow);
         });
     }
 
     addToggleIsFinishedEventListener(element) {
-        element.addEventListener("click", (event) => {
+        element.addEventListener("click", () => {
             const isFinished = this.model.isFinished(element.idRow);
             this.model.setIsFinished(element.idRow, !isFinished);
             this.view.setStyleToggleIsFinished(element, !isFinished);
         });
     }
 
-    getTableJson_call(tableJson) {
+    getTableJson_call() {
         this.model.getTableRows();
     }
 

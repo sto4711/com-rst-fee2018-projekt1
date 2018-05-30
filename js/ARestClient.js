@@ -1,5 +1,3 @@
-'usestrict';
-
 /*
  Abstract class
  */
@@ -51,5 +49,5 @@ class ARestClient {
         };
         */
     }
-};
+}
 
