@@ -1,12 +1,7 @@
-'usestrict';
-
-
 class Model {
     constructor(controller) {
-        this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';
         this.TABLE_COL_NAMES = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
         this.controller = controller;
-        this.rowsJson;
 
         this.restClientGET = new ARestClient("GET");
         this.restClientGET.onSuccess = (json) => { /* inner class, override */
@@ -20,7 +15,7 @@ class Model {
         };
 
         this.restClientPUT_IsFinished = new ARestClient("PUT");
-        this.restClientPUT_IsFinished.onSuccess = (json) => { /* inner class, override */
+        this.restClientPUT_IsFinished.onSuccess = () => { /* inner class, override */
             this.controller.putTableRowIsFinishedJson_callback();
         };
 
@@ -54,14 +49,17 @@ class Model {
     }
 
     deleteTableRow(idRow) {
-        this.restClientDELETE.doRequest(null);
+        this.restClientDELETE.doRequest({
+            "id": idRow
+        });
     }
 
     getSelectedRows(finished) {
         const result = [];
         //performance++
         for (let i = 0; i < this.rowsJson.length; i++) {
-            if (row[this.TABLE_COL_NAMES[5]] == finished || !finished) {
+            const isFinished = this.rowsJson[i][this.TABLE_COL_NAMES[5]];
+            if (  Boolean(isFinished === finished)     || !finished) {
                 result.push(this.rowsJson[i]);
             }
         }
@@ -71,8 +69,8 @@ class Model {
     isFinished(id) {
         let result = false;
         for (let i = 0; i < this.rowsJson.length; i++) {
-            let row = this.rowsJson[i];
-            if (row[this.TABLE_COL_NAMES[0]] == id && row[this.TABLE_COL_NAMES[5]]) {
+            const row = this.rowsJson[i];
+            if (row[this.TABLE_COL_NAMES[0]] === id && row[this.TABLE_COL_NAMES[5]]) {
                 result = true;
                 break;
             }
@@ -81,9 +79,8 @@ class Model {
     }
 
     setIsFinished(id, isFinished) {
-        let row
         for (let i = 0; i < this.rowsJson.length; i++) {
-            if (this.rowsJson[i][this.TABLE_COL_NAMES[0]] == id) {
+            if (this.rowsJson[i][this.TABLE_COL_NAMES[0]] === id) {
                 this.rowsJson[i][this.TABLE_COL_NAMES[5]] = isFinished;
                 break;
             }
@@ -104,7 +101,6 @@ class Model {
     }
 
     sortByImportance() {
-
         this.rowsJson.sort((a, b) => {
             return a[this.TABLE_COL_NAMES[3]] < b[this.TABLE_COL_NAMES[3]];
         });
@@ -112,5 +108,5 @@ class Model {
 
 
 }
-;
+
 
