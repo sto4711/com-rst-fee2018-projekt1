@@ -17,7 +17,7 @@ class View {
     }
 
     createNoteItem(rowJson) {
-        let idRow = rowJson[this.model.TABLE_COL_NAMES[0]];
+        const idRow = rowJson[this.model.TABLE_COL_NAMES[0]];
         let item = document.createElement("TABLE");
         let buttonDelete = document.createElement("BUTTON");
         let buttonModify = document.createElement("BUTTON");
