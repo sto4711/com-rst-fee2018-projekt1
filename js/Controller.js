@@ -48,7 +48,7 @@ class Controller {
     }
 
     reloadTable() {
-        let checked = document.getElementById("finishedCheckbox").checked;
+        const checked = document.getElementById("finishedCheckbox").checked;
         this.view.deleteAllTableRows();
         $.each(this.model.getSelectedRows(checked), (index, rowJson) => {
             this.view.addTableRow(rowJson);
@@ -71,7 +71,7 @@ class Controller {
 
     addToggleIsFinishedEventListener(element) {
         element.addEventListener("click", (event) => {
-            let isFinished = this.model.isFinished(element.idRow);
+            const isFinished = this.model.isFinished(element.idRow);
             this.model.setIsFinished(element.idRow, !isFinished);
             this.view.setStyleToggleIsFinished(element, !isFinished);
         });
@@ -102,12 +102,12 @@ class Controller {
 
     editDialogOkPressed() {
         this.view.closeEditDialog();
-        let id = -1;
-        let title = this.view.inputTitle.value;
-        let description = this.view.inputDescription.value;
-        let importance = this.view.inputImportance.value;
-        let completedBy = this.view.inputCompletedBy.value;
-        let isFinished = false;
+        const id = -1;
+        const title = this.view.inputTitle.value;
+        const description = this.view.inputDescription.value;
+        const importance = this.view.inputImportance.value;
+        const completedBy = this.view.inputCompletedBy.value;
+        const isFinished = false;
         this.model.putTableRow(id, title, description, importance, completedBy, isFinished);
     }
 

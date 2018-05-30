@@ -7,18 +7,26 @@ class Model {
         this.TABLE_COL_NAMES = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
         this.controller = controller;
         this.rowsJson;
+
         this.restClientGET = new ARestClient("GET");
         this.restClientGET.onSuccess = (json) => { /* inner class, override */
             this.rowsJson = json.rows;
             this.controller.getTableJson_callback(this.rowsJson);
         };
+
         this.restClientPUT_Row = new ARestClient("PUT");
         this.restClientPUT_Row.onSuccess = (json) => { /* inner class, override */
             this.controller.putTableRowJson_callback(json);
         };
+
         this.restClientPUT_IsFinished = new ARestClient("PUT");
         this.restClientPUT_IsFinished.onSuccess = (json) => { /* inner class, override */
             this.controller.putTableRowIsFinishedJson_callback();
+        };
+
+        this.restClientDELETE = new ARestClient("DELETE");
+        this.restClientDELETE.onSuccess = (json) => { /* inner class, override */
+            this.controller.deleteTableRowJson_callback(json);
         };
     }
 
@@ -45,13 +53,16 @@ class Model {
         );
     }
 
+    deleteTableRow(idRow) {
+        this.restClientDELETE.doRequest(null);
+    }
+
     getSelectedRows(finished) {
-        let result = [];
+        const result = [];
         //performance++
         for (let i = 0; i < this.rowsJson.length; i++) {
-            let row = this.rowsJson[i];
             if (row[this.TABLE_COL_NAMES[5]] == finished || !finished) {
-                result.push(row);
+                result.push(this.rowsJson[i]);
             }
         }
         return result;
@@ -93,41 +104,10 @@ class Model {
     }
 
     sortByImportance() {
+
         this.rowsJson.sort((a, b) => {
             return a[this.TABLE_COL_NAMES[3]] < b[this.TABLE_COL_NAMES[3]];
         });
-    }
-
-
-    deleteTableRow(idRow) {
-        $.ajax({
-            type: "DELETE",
-            url: this.URL_REST_NOTE,
-            data: {
-                "id": idRow
-            },
-            url: this.URL_REST_NOTE,
-            success: (json) => {
-                this.controller.deleteTableRowJson_callback(json);
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-                this.onAjaxError(jqXHR, textStatus, errorThrown, "DELETE");
-            },
-        });
-    }
-
-    onAjaxError(jqXHR, textStatus, errorThrown, ajaxMethod) {
-        console.debug("ajax error " + textStatus);
-        this.controller.view.showErrorDialog("There's an issue with the backend, please contact IT");
-        /*
-        throw {
-            name: "AjaxException",
-            message: textStatus,
-            toString: function () {
-                return this.name + ": " + this.message;
-            }
-        };
-        */
     }
 
 
