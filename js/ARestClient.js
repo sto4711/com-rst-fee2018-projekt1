@@ -3,26 +3,24 @@
 /*
  Abstract class
  */
-class ARestCaller {
-    constructor() {
+class ARestClient {
+    constructor(ajaxType) {
         this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';
-
-        /*
-        if (this instanceof ARestCaller) {
-            throw {
-                name: "AjaxException",
-                message: "not allowed to instancing a abstract class",
-                toString: function () {
-                    return "not allowed to instancing a abstract class";
-                }
-            };
-        }
-        */
+        this.ajaxType = ajaxType;
+        // if (this instanceof ARestClient) {
+        //     throw {
+        //         name: "WrongInstanceofException",
+        //         message: "not allowed to instancing a abstract class",
+        //         toString: function () {
+        //             return "not allowed to instancing a abstract class";
+        //         }
+        //     };
+        // }
     }
 
-    doRestCall(dataJson) {
+    doRequest(dataJson) {
         $.ajax({
-            type: this.getAjaxType(),
+            type: this.ajaxType,
             dataType: "json",
             url: this.URL_REST_NOTE,
             data: dataJson,
@@ -36,13 +34,8 @@ class ARestCaller {
     }
 
     /*  must be be overridden */
-    getAjaxType() {
-        return "GET";
-    }
-
-    /*  must be be overridden */
     onSuccess(dataJson) {
-        Logger.debugConsole("ARestCaller.onSuccess() -> must be overridden");
+        Logger.debugConsole("ARestClient.onSuccess() -> must be overridden");
     }
 
     onError(jqXHR, textStatus, errorThrown) {

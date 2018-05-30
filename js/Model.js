@@ -1,51 +1,48 @@
 'usestrict';
 
 
-class RestCallerGET extends ARestCaller {
-    /*  must be be overridden */
-    getAjaxType() {
-        return "GET";
-    }
-}
-
-class RestCallerPUT extends ARestCaller {
-    /*  must be be overridden */
-    getAjaxType() {
-        return "PUT";
-    }
-}
-
 class Model {
     constructor(controller) {
         this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';
         this.TABLE_COL_NAMES = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
         this.controller = controller;
         this.rowsJson;
-        this.restCallerGET = new RestCallerGET();
-        this.restCallerGET.onSuccess =  (json) =>  { /* inner class, override */
+        this.restClientGET = new ARestClient("GET");
+        this.restClientGET.onSuccess = (json) => { /* inner class, override */
             this.rowsJson = json.rows;
             this.controller.getTableJson_callback(this.rowsJson);
+        };
+        this.restClientPUT_Row = new ARestClient("PUT");
+        this.restClientPUT_Row.onSuccess = (json) => { /* inner class, override */
+            this.controller.putTableRowJson_callback(json);
+        };
+        this.restClientPUT_IsFinished = new ARestClient("PUT");
+        this.restClientPUT_IsFinished.onSuccess = (json) => { /* inner class, override */
+            this.controller.putTableRowIsFinishedJson_callback();
         };
     }
 
     getTableRows() {
-        this.restCallerGET.doRestCall();
-        /*
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: this.URL_REST_NOTE,
-            success: (json) => {
-                this.rowsJson = json.rows;
-                let jsonStr = JSON.stringify(json);
-                localStorage.setItem("rst4711", jsonStr);
-                this.controller.getTableJson_callback(json.rows);
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-                this.onAjaxError(jqXHR, textStatus, errorThrown, "GET");
-            },
+        this.restClientGET.doRequest(null);
+    }
+
+    putTableRowIsFinished(id, isFinished) {
+        this.restClientPUT_IsFinished.doRequest({
+            "id": id,
+            "isFinished": isFinished,
         });
-        */
+    }
+
+    putTableRow(id, title, description, importance, completedBy, isFinished) {
+        this.restClientPUT_Row.doRequest({
+                "id": id,
+                "title": title,
+                "description": description,
+                "importance": importance,
+                "completedBy": completedBy,
+                "isFinished": isFinished,
+            }
+        );
     }
 
     getSelectedRows(finished) {
@@ -101,45 +98,6 @@ class Model {
         });
     }
 
-    putTableRowIsFinished(id, isFinished) {
-        $.ajax({
-            type: "PUT",
-            dataType: "json",
-            url: this.URL_REST_NOTE,
-            data: {
-                "id": id,
-                "isFinished": isFinished,
-            },
-            success: (json) => {
-                this.controller.putTableRowIsFinishedJson_callback();
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-                this.onAjaxError(jqXHR, textStatus, errorThrown, "PUT");
-            },
-        });
-    }
-
-    putTableRow(id, title, description, importance, completedBy, isFinished) {
-        $.ajax({
-            type: "PUT",
-            dataType: "json",
-            url: this.URL_REST_NOTE,
-            data: {
-                "id": id,
-                "title": title,
-                "description": description,
-                "importance": importance,
-                "completedBy": completedBy,
-                "isFinished": isFinished,
-            },
-            success: (json) => {
-                this.controller.putTableRowJson_callback(json);
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-                this.onAjaxError(jqXHR, textStatus, errorThrown, "PUT");
-            },
-        });
-    }
 
     deleteTableRow(idRow) {
         $.ajax({
@@ -173,5 +131,6 @@ class Model {
     }
 
 
-};
+}
+;
 
