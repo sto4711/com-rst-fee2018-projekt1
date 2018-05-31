@@ -75,7 +75,30 @@ class View {
         }
     }
 
-    showEditDialog() {
+    showEditDialog(isInsertUpdate, rowJSON) {
+        if(isInsertUpdate)  {// Insert
+            /* don't clean the input values */
+        }else   { // Update, set the values
+            this.inputTitle.value = rowJSON[this.model.TABLE_COL_NAMES[1]];
+            this.inputDescription.value = rowJSON[this.model.TABLE_COL_NAMES[2]];
+            this.inputImportance.value = rowJSON[this.model.TABLE_COL_NAMES[3]];
+            this.inputCompletedBy.value = rowJSON[this.model.TABLE_COL_NAMES[4]];
+
+//            this.TABLE_COL_NAMES = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
+
+
+            // this.inputDescription = document.getElementById("inputDescription");
+            // this.inputImportance = document.getElementById("inputImportance");
+            // this.inputCompletedBy = document.getElementById("inputCompletedBy");
+
+
+
+
+
+
+        }
+
+
         try {
             this.editDialog.showModal();//works only in Chrome
         }catch (e) {
