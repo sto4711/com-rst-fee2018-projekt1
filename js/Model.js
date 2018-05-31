@@ -25,6 +25,16 @@ class Model {
         };
     }
 
+    getTableRow(idRow) {
+        let row = null;
+        for (let i = 0; i < this.rowsJson.length; i++) {
+            if (this.rowsJson[i][this.TABLE_COL_NAMES[0]] ===idRow) {
+                row = this.rowsJson[i];
+            }
+        }
+        return row;
+    }
+
     getTableRows() {
         this.restClientGET.doRequest(null);
     }

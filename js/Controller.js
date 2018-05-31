@@ -15,45 +15,45 @@ class Controller {
     registerEventListener() {
         this.registerOnbeforeunload();
 
-        document.getElementById("addRecordButton").addEventListener('click', () => {
+        document.getElementById("addRecordButton").addEventListener("click", () => {
             window.onbeforeunload = null;
-            this.view.showEditDialog();
+            this.view.showEditDialog(true, null);
         });
 
-        document.getElementById("editDialogCancelButton").addEventListener('click', () => {
+        document.getElementById("editDialogCancelButton").addEventListener("click", () => {
             this.view.closeEditDialog();
         });
 
-        document.getElementById("errorDialogSubmitButton").addEventListener('click', () => {
+        document.getElementById("errorDialogSubmitButton").addEventListener("click", () => {
             this.view.closeErrorDialog();
         });
 
-        document.getElementById("changeStyleButton").addEventListener('click', () => {
+        document.getElementById("changeStyleButton").addEventListener("click", () => {
             this.view.toggleStyle();
             this.view.setStyle();
 
         });
 
-        document.getElementById("finishedCheckbox").addEventListener('click', () => {
+        document.getElementById("finishedCheckbox").addEventListener("click", () => {
             this.reloadTable();
         });
 
-        document.getElementById("radioByFinished").addEventListener('click', () => {
+        document.getElementById("radioByFinished").addEventListener("click", () => {
             this.model.sortByFinished();
             this.reloadTable();
         });
 
-        document.getElementById("radioByCreated").addEventListener('click', () => {
+        document.getElementById("radioByCreated").addEventListener("click", () => {
             this.model.sortByCreated();
             this.reloadTable();
         });
 
-        document.getElementById("radioByImportance").addEventListener('click', () => {
+        document.getElementById("radioByImportance").addEventListener("click", () => {
             this.model.sortByImportance();
             this.reloadTable();
         });
 
-        document.getElementById("editDialog").addEventListener('submit', () => {
+        document.getElementById("editDialog").addEventListener("submit", () => {
             this.editDialogOkPressed();
         });
     }
@@ -74,8 +74,8 @@ class Controller {
     }
 
     addUpdateEventListener(element) {
-        element.addEventListener("click", () => {
-            Logger.debugConsole("update row " + element.idRow);
+        element.addEventListener("click", (event) => {
+            this.view.showEditDialog(false, this.model.getTableRow(event.target.idRow));
         });
     }
 
@@ -103,7 +103,7 @@ class Controller {
     }
 
     putTableRowIsFinished_JSON_callback() {
-
+    //
     }
 
     deleteTableRow_JSON_callback() {
@@ -122,7 +122,6 @@ class Controller {
         };
         */
     }
-
 
     editDialogOkPressed() {
         this.view.closeEditDialog();
