@@ -3,11 +3,20 @@ class Controller {
         this.model = new Model(this);
         this.view = new View(this.model, this);
         this.registerEventListener();
-        this.getTableJson_call();
+        this.getTable_JSON_call();
+    }
+
+    registerOnbeforeunload() {
+        window.onbeforeunload = function () {
+            return "Are you sure?";
+        };
     }
 
     registerEventListener() {
+        this.registerOnbeforeunload();
+
         document.getElementById("addRecordButton").addEventListener('click', () => {
+            window.onbeforeunload = null;
             this.view.showEditDialog();
         });
 
@@ -43,6 +52,10 @@ class Controller {
             this.model.sortByImportance();
             this.reloadTable();
         });
+
+        document.getElementById("editDialog").addEventListener('submit', () => {
+            this.editDialogOkPressed();
+        });
     }
 
     reloadTable() {
@@ -55,7 +68,7 @@ class Controller {
 
     addDeleteEventListener(element) {
         element.addEventListener("click", (event) => {
-            //element.removeEventListener("click"); will be handled by bubbling
+            //element.removeEventListener("click"); will be handled by bubbling automatically
             this.model.deleteTableRow(event.target.idRow);
         });
     }
@@ -74,31 +87,46 @@ class Controller {
         });
     }
 
-    getTableJson_call() {
+    getTable_JSON_call() {
         this.model.getTableRows();
     }
 
-    getTableJson_callback(tableJson) {
+    getTable_JSON_callback(tableJson) {
         this.view.deleteAllTableRows();
         $.each(tableJson, (index, rowJson) => {
             this.view.addTableRow(rowJson);
         });
     }
 
-    putTableRowJson_callback() {
-        this.getTableJson_call();
+    putTableRow_JSON_callback() {
+        this.getTable_JSON_call();
     }
 
-    putTableRowIsFinishedJson_callback() {
+    putTableRowIsFinished_JSON_callback() {
 
     }
 
-    deleteTableRowJson_callback() {
-        this.getTableJson_call();
+    deleteTableRow_JSON_callback() {
+        this.getTable_JSON_call();
     }
+
+    ajaxError_callback(jqXHR, textStatus, errorThrown) {
+        this.view.showErrorDialog("There's an issue with the backend. Please try again later");
+        /*
+        throw {
+            name: "AjaxException",
+            message: textStatus,
+            toString: function () {
+                return textStatus + " -> " + jqXHR.responseText;
+            }
+        };
+        */
+    }
+
 
     editDialogOkPressed() {
         this.view.closeEditDialog();
+        this.registerOnbeforeunload(); /* hack */
         const id = -1;
         const title = this.view.inputTitle.value;
         const description = this.view.inputDescription.value;
