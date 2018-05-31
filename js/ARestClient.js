@@ -2,8 +2,9 @@
  Abstract class
  */
 class ARestClient {
-    constructor(ajaxType) {
+    constructor(errorCallbackHandler, ajaxType = "PLEASE DEFINE AJAX TYPE") {
         this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';
+        this.errorCallbackHandler = errorCallbackHandler;
         this.ajaxType = ajaxType;
         // if (this instanceof ARestClient) {
         //     throw {
@@ -37,17 +38,7 @@ class ARestClient {
     }
 
     onError(jqXHR, textStatus, errorThrown) {
-        console.debug("ajax error " + textStatus);
-        this.view.showErrorDialog("There's an issue with the backend. Please try again later");
-        /*
-        throw {
-            name: "AjaxException",
-            message: textStatus,
-            toString: function () {
-                return this.name + ": " + this.message;
-            }
-        };
-        */
+        this.errorCallbackHandler.ajaxError_callback(jqXHR, textStatus, errorThrown);
     }
 }
 

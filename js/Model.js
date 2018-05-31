@@ -1,27 +1,27 @@
 class Model {
-    constructor(controller) {
+    constructor(callbackHandler) {
         this.TABLE_COL_NAMES = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
-        this.controller = controller;
+        this.callbackHandler = callbackHandler;
 
-        this.restClientGET = new ARestClient("GET");
-        this.restClientGET.onSuccess = (json) => { /* inner class, override */
+        this.restClientGET = new ARestClient(this.callbackHandler, "GET");
+        this.restClientGET.onSuccess = (json) => { /* override */
             this.rowsJson = json.rows;
-            this.controller.getTableJson_callback(this.rowsJson);
+            this.callbackHandler.getTable_JSON_callback(this.rowsJson);
         };
 
-        this.restClientPUT_Row = new ARestClient("PUT");
-        this.restClientPUT_Row.onSuccess = (json) => { /* inner class, override */
-            this.controller.putTableRowJson_callback(json);
+        this.restClientPUT_Row = new ARestClient(this.callbackHandler, "PUT");
+        this.restClientPUT_Row.onSuccess = (json) => { /* override */
+            this.callbackHandler.putTableRow_JSON_callback(json);
         };
 
-        this.restClientPUT_IsFinished = new ARestClient("PUT");
-        this.restClientPUT_IsFinished.onSuccess = () => { /* inner class, override */
-            this.controller.putTableRowIsFinishedJson_callback();
+        this.restClientPUT_IsFinished = new ARestClient(this.callbackHandler, "PUT");
+        this.restClientPUT_IsFinished.onSuccess = () => { /* override */
+            this.callbackHandler.putTableRowIsFinished_JSON_callback();
         };
 
-        this.restClientDELETE = new ARestClient("DELETE");
-        this.restClientDELETE.onSuccess = (json) => { /* inner class, override */
-            this.controller.deleteTableRowJson_callback(json);
+        this.restClientDELETE = new ARestClient(this.callbackHandler, "DELETE");
+        this.restClientDELETE.onSuccess = (json) => { /* override */
+            this.callbackHandler.deleteTableRow_JSON_callback(json);
         };
     }
 
@@ -59,7 +59,7 @@ class Model {
         //performance++
         for (let i = 0; i < this.rowsJson.length; i++) {
             const isFinished = this.rowsJson[i][this.TABLE_COL_NAMES[5]];
-            if (  Boolean(isFinished === finished)     || !finished) {
+            if (Boolean(isFinished === finished) || !finished) {
                 result.push(this.rowsJson[i]);
             }
         }
