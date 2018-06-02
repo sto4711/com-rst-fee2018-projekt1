@@ -1,52 +1,46 @@
 class Model {
     constructor(callbackHandler) {
-        this.TABLE_COL_NAMES = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
+        this.LIST_ITEM_ELEMENTS = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
         this.callbackHandler = callbackHandler;
 
         this.restClientGET = new ARestClient(this.callbackHandler, "GET");
         this.restClientGET.onSuccess = (json) => { /* override */
             this.rowsJson = json.rows;
-            this.callbackHandler.getTable_JSON_callback(this.rowsJson);
+            this.callbackHandler.getItemList_JSON_callback(this.rowsJson);
         };
 
         this.restClientPUT_Row = new ARestClient(this.callbackHandler, "PUT");
         this.restClientPUT_Row.onSuccess = (json) => { /* override */
-            this.callbackHandler.putTableRow_JSON_callback(json);
+            this.callbackHandler.putItemListEntry_JSON_callback(json);
         };
 
         this.restClientPUT_IsFinished = new ARestClient(this.callbackHandler, "PUT");
         this.restClientPUT_IsFinished.onSuccess = () => { /* override */
-            this.callbackHandler.putTableRowIsFinished_JSON_callback();
+            this.callbackHandler.putItemListEntryFinished_JSON_callback();
         };
 
         this.restClientDELETE = new ARestClient(this.callbackHandler, "DELETE");
         this.restClientDELETE.onSuccess = (json) => { /* override */
-            this.callbackHandler.deleteTableRow_JSON_callback(json);
+            this.callbackHandler.deleteItemListEntry_JSON_callback(json);
         };
     }
 
-    getTableRow(idRow) {
+    getItem(idRow) {
         let row = null;
         for (let i = 0; i < this.rowsJson.length; i++) {
-            if (this.rowsJson[i][this.TABLE_COL_NAMES[0]] ===idRow) {
+            if (this.rowsJson[i][this.LIST_ITEM_ELEMENTS[0]] === idRow) {
                 row = this.rowsJson[i];
+                break;
             }
         }
         return row;
     }
 
-    getTableRows() {
+    getItemList() {
         this.restClientGET.doRequest(null);
     }
 
-    putTableRowIsFinished(id, isFinished) {
-        this.restClientPUT_IsFinished.doRequest({
-            "id": id,
-            "isFinished": isFinished,
-        });
-    }
-
-    putTableRow(id, title, description, importance, completedBy, isFinished) {
+    putItem(id, title, description, importance, completedBy, isFinished) {
         this.restClientPUT_Row.doRequest({
                 "id": id,
                 "title": title,
@@ -58,17 +52,17 @@ class Model {
         );
     }
 
-    deleteTableRow(idRow) {
+    deleteItem(idRow) {
         this.restClientDELETE.doRequest({
             "id": idRow
         });
     }
 
-    getSelectedRows(finished) {
+    getSelectedItems(finished) {
         const result = [];
         //performance++
         for (let i = 0; i < this.rowsJson.length; i++) {
-            const isFinished = this.rowsJson[i][this.TABLE_COL_NAMES[5]];
+            const isFinished = this.rowsJson[i][this.LIST_ITEM_ELEMENTS[5]];
             if (Boolean(isFinished === finished) || !finished) {
                 result.push(this.rowsJson[i]);
             }
@@ -80,7 +74,7 @@ class Model {
         let result = false;
         for (let i = 0; i < this.rowsJson.length; i++) {
             const row = this.rowsJson[i];
-            if (row[this.TABLE_COL_NAMES[0]] === id && row[this.TABLE_COL_NAMES[5]]) {
+            if (row[this.LIST_ITEM_ELEMENTS[0]] === id && row[this.LIST_ITEM_ELEMENTS[5]]) {
                 result = true;
                 break;
             }
@@ -90,29 +84,33 @@ class Model {
 
     setIsFinished(id, isFinished) {
         for (let i = 0; i < this.rowsJson.length; i++) {
-            if (this.rowsJson[i][this.TABLE_COL_NAMES[0]] === id) {
-                this.rowsJson[i][this.TABLE_COL_NAMES[5]] = isFinished;
+            if (this.rowsJson[i][this.LIST_ITEM_ELEMENTS[0]] === id) {
+                this.rowsJson[i][this.LIST_ITEM_ELEMENTS[5]] = isFinished;
                 break;
             }
         }
-        this.putTableRowIsFinished(id, isFinished);
+
+        this.restClientPUT_IsFinished.doRequest({
+            "id": id,
+            "isFinished": isFinished,
+        });
     }
 
     sortByFinished() {
         this.rowsJson.sort((a, b) => {
-            return a[this.TABLE_COL_NAMES[4]] < b[this.TABLE_COL_NAMES[4]];
+            return a[this.LIST_ITEM_ELEMENTS[4]] < b[this.LIST_ITEM_ELEMENTS[4]];
         });
     }
 
     sortByCreated() {
         this.rowsJson.sort((a, b) => {
-            return a[this.TABLE_COL_NAMES[6]] < b[this.TABLE_COL_NAMES[6]];
+            return a[this.LIST_ITEM_ELEMENTS[6]] < b[this.LIST_ITEM_ELEMENTS[6]];
         });
     }
 
     sortByImportance() {
         this.rowsJson.sort((a, b) => {
-            return a[this.TABLE_COL_NAMES[3]] < b[this.TABLE_COL_NAMES[3]];
+            return a[this.LIST_ITEM_ELEMENTS[3]] < b[this.LIST_ITEM_ELEMENTS[3]];
         });
     }
 

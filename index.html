@@ -6,6 +6,7 @@
     <link rel='stylesheet' href='css/screen.css'>
     <script src='./js/jquery-3.3.1.min.js'></script>
     <script src='./js/handlebars-v4.0.11.js'></script>
+    <script src='js/HandlebarsHelper.js'></script>
     <script src='./js/Logger.js'></script>
     <script src='js/ARestClient.js'></script>
     <script src='./js/Model.js'></script>
@@ -13,22 +14,22 @@
     <script src='./js/Controller.js'></script>
     <title>Notes</title>
 </head>
-<body class='body' >
+<body class='body' onbeforeunload="return 'Are you sure?'">
 
-<header class="header" >
-    <div class="wrapperInfo">
+<header class="header">
+    <div class="headerInfo">
         rst 06.2018 CAS FEE Project 1
-        grid flex / event bubbling (generischer Eventhandler) für Buttons ins Liste / handlebars / update note / Problem onbeforeunload bei Dialog
+        word wrap position relative nok / import / onbeforeUnload
     </div>
-    <div class="wrapperToggleStyle">
-        <button id="changeStyleButton" class="fa fa-paint-brush"></button>
+    <div class="headerToggleStyle">
+        <button id="changeStyleButton" class="button fa fa-paint-brush"></button>
     </div>
 
     <h1 class="headerTitle">Notes</h1>
-    <div class="wrapperButton">
-        <button id="addRecordButton" class="fa fa-calendar-plus-o"></button>
+    <div class="headerButton">
+        <button id="addRecordButton" class="button fa fa-calendar-plus-o"></button>
     </div>
-    <div class="wrapperOrderBy">
+    <div class="headerOrderBy">
         <input type="radio" id="radioByFinished"
                name="contact" value="email" checked="checked">
         <label for="radioByFinished">By finish Date</label>
@@ -39,24 +40,52 @@
                name="contact" value="mail">
         <label for="radioByImportance">By Importance</label>
     </div>
-    <div class="wrapperFilter">
+    <div class="headerFilter">
         <input type="checkbox" id="finishedCheckbox">
         <label for="finishedCheckbox">finished</label>
     </div>
 </header>
 
-<nav class="nav" ></nav>
+<nav class="nav"></nav>
 
-<main class="main" >
-    <table id='noteTable' class="table"></table>
+<main class="main">
+    <div id="noteItemContainer" class="noteItemContainer">
+    </div>
 </main>
 
-<aside class="aside" ></aside>
+<aside class="aside"></aside>
 
-<footer class="footer" ></footer>
+<footer class="footer"></footer>
 
-<dialog id="editDialog" class="editDialog">
-    <form name="myform" >
+
+
+<script id="noteItem-template" type="text/x-handlebars-template">
+    {{#each .}}
+    <div class="noteItem">
+        <div class="noteItem_Header">
+            <button class="button fa fa-calendar-minus-o" data-com_rst_note_action="DELETE" data-com_rst_note_id-row="{{id}}"></button>
+            <button class="button fa fa-edit" data-com_rst_note_action="UPDATE" data-com_rst_note_id-row="{{id}}"></button>
+            <button class="button fa fa-check-square-o" data-com_rst_note_action="FINISH" data-com_rst_note_id-row="{{id}}"></button>
+            <div class="noteItem_HeaderRight">
+                {{#for_zero_to_n importance}}
+                <i class="fa fa-flash"></i>
+                {{/for_zero_to_n}}
+            </div>
+        </div>
+        <div class="noteItem_Title"><H2>{{title}}</H2></div>
+        <div class="noteItem_Description">{{description}}</div>
+        <div class="noteItem_Footer">created {{created}}
+            <div class="noteItem_FooterRight">
+                finished by {{completedBy}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+
+
+<dialog id="editDialog" class="dialog">
+    <form>
         <table>
             <tr>
                 <td>Title</td>
@@ -78,24 +107,25 @@
             <tr>
                 <td>Completed by</td>
                 <td>
-                    <input id="inputCompletedBy" type="date" value="2013-01-08" required>
+                    <input id="inputCompletedBy" type="date" required>
                 </td>
             </tr>
         </table>
         <menu>
-            <button id="editDialogSubmitButton" type="submit" class="fa fa-check-square-o"></button>
-            <button id="editDialogResetButton" type="reset" class="fa fa-eraser"></button>
-            <button id="editDialogCancelButton" type="reset" class="fa fa-close"></button>
+            <button id="editDialogSubmitButton" type="submit" class="button fa fa-check-square-o"></button>
+            <button id="editDialogResetButton" type="reset" class="button fa fa-eraser"></button>
+            <button id="editDialogCancelButton" type="reset" class="button fa fa-close"></button>
         </menu>
     </form>
 </dialog>
 
-<dialog id="errorDialog">
+<dialog id="dialog">
     <p id="errorDialogMessage">Greetings, one and all!</p>
     <menu>
         <button id="errorDialogSubmitButton" type="submit" class="fa fa-check-square-o"></button>
     </menu>
 </dialog>
+
 
 <!--DOM is now fully loaded... -->
 <script>new Controller();</script>
@@ -103,3 +133,4 @@
 
 </body>
 </html>
+

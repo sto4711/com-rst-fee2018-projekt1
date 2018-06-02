@@ -1,23 +1,31 @@
 class Controller {
     constructor() {
         this.model = new Model(this);
-        this.view = new View(this.model, this);
+        this.view = new View(this.model);
         this.registerEventListener();
-        this.getTable_JSON_call();
-    }
-
-    registerOnbeforeunload() {
-        window.onbeforeunload = function () {
-            return "Are you sure?";
-        };
+        this.getItemList_JSON_call();
     }
 
     registerEventListener() {
-        this.registerOnbeforeunload();
+        /* bubbling */
+        document.getElementById("noteItemContainer").addEventListener("click", (event) => {
+            const action = event.target.dataset.com_rst_note_action;
+            if(action != null && action==="DELETE")   {
+                this.model.deleteItem(parseInt(event.target.dataset.com_rst_note_idRow));
+            }
+            else if(action != null &&action==="UPDATE")   {
+                this.view.showEditDialog(this.model.getItem(parseInt(event.target.dataset.com_rst_note_idRow)));
+            }
+            else if(action != null &&action==="FINISH")   {
+                const idRow = parseInt(event.target.dataset.com_rst_note_idRow);
+                const isFinished = this.model.isFinished(idRow);
+                this.model.setIsFinished(idRow, !isFinished);
+                this.view.setStyleToggleIsFinished(event.target, !isFinished);
+            }
+        });
 
         document.getElementById("addRecordButton").addEventListener("click", () => {
-            window.onbeforeunload = null;
-            this.view.showEditDialog(true, null);
+            this.view.showEditDialog(null);
         });
 
         document.getElementById("editDialogCancelButton").addEventListener("click", () => {
@@ -35,22 +43,22 @@ class Controller {
         });
 
         document.getElementById("finishedCheckbox").addEventListener("click", () => {
-            this.reloadTable();
+            this.reloadItemList();
         });
 
         document.getElementById("radioByFinished").addEventListener("click", () => {
             this.model.sortByFinished();
-            this.reloadTable();
+            this.reloadItemList();
         });
 
         document.getElementById("radioByCreated").addEventListener("click", () => {
             this.model.sortByCreated();
-            this.reloadTable();
+            this.reloadItemList();
         });
 
         document.getElementById("radioByImportance").addEventListener("click", () => {
             this.model.sortByImportance();
-            this.reloadTable();
+            this.reloadItemList();
         });
 
         document.getElementById("editDialog").addEventListener("submit", () => {
@@ -58,56 +66,29 @@ class Controller {
         });
     }
 
-    reloadTable() {
+    reloadItemList() {
         const checked = document.getElementById("finishedCheckbox").checked;
-        this.view.deleteAllTableRows();
-        $.each(this.model.getSelectedRows(checked), (index, rowJson) => {
-            this.view.addTableRow(rowJson);
-        });
+        this.view.generateNoteItemList(this.model.getSelectedItems(checked));
     }
 
-    addDeleteEventListener(element) {
-        element.addEventListener("click", (event) => {
-            //element.removeEventListener("click"); will be handled by bubbling automatically
-            this.model.deleteTableRow(event.target.idRow);
-        });
+    getItemList_JSON_call() {
+        this.model.getItemList();
     }
 
-    addUpdateEventListener(element) {
-        element.addEventListener("click", (event) => {
-            this.view.showEditDialog(false, this.model.getTableRow(event.target.idRow));
-        });
+    getItemList_JSON_callback(tableJson) {
+        this.reloadItemList();
     }
 
-    addToggleIsFinishedEventListener(element) {
-        element.addEventListener("click", () => {
-            const isFinished = this.model.isFinished(element.idRow);
-            this.model.setIsFinished(element.idRow, !isFinished);
-            this.view.setStyleToggleIsFinished(element, !isFinished);
-        });
+    putItemListEntry_JSON_callback() {
+        this.getItemList_JSON_call();
     }
 
-    getTable_JSON_call() {
-        this.model.getTableRows();
-    }
-
-    getTable_JSON_callback(tableJson) {
-        this.view.deleteAllTableRows();
-        $.each(tableJson, (index, rowJson) => {
-            this.view.addTableRow(rowJson);
-        });
-    }
-
-    putTableRow_JSON_callback() {
-        this.getTable_JSON_call();
-    }
-
-    putTableRowIsFinished_JSON_callback() {
+    putItemListEntryFinished_JSON_callback() {
     //
     }
 
-    deleteTableRow_JSON_callback() {
-        this.getTable_JSON_call();
+    deleteItemListEntry_JSON_callback() {
+        this.getItemList_JSON_call();
     }
 
     ajaxError_callback(jqXHR, textStatus, errorThrown) {
@@ -123,16 +104,15 @@ class Controller {
         */
     }
 
-    editDialogOkPressed() {
+    editDialogOkPressed(event) {
         this.view.closeEditDialog();
-        this.registerOnbeforeunload(); /* hack */
-        const id = -1;
+        const id = this.view.idRow;//in case of an insert this will be -1. Logic will be handled in backend
         const title = this.view.inputTitle.value;
         const description = this.view.inputDescription.value;
         const importance = this.view.inputImportance.value;
         const completedBy = this.view.inputCompletedBy.value;
         const isFinished = false;
-        this.model.putTableRow(id, title, description, importance, completedBy, isFinished);
+        this.model.putItem(id, title, description, importance, completedBy, isFinished);
     }
 
 }
