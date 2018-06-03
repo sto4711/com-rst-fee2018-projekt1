@@ -1,76 +1,90 @@
 class Controller {
     constructor() {
+
+
         this.model = new Model(this);//callbackhandler
         this.view = new View(this.model);
+        this.radioByFinished = $('#radioByFinished')[0];
+        this.radioByCreated = $('#radioByCreated')[0];
+        this.radioByImportance = $('#radioByImportance')[0];
+        this.checkboxFilterFinished = $('#checkboxFilterFinished')[0];
         this.registerEventListener();
         this.getItemList_JSON_call();
     }
 
     registerEventListener() {
-        document.getElementById("buttonAddItem").addEventListener("click", () => {
+        document.onbeforeunload = function () {
+            return 'Are you sure?';
+        };
+
+
+        $('#buttonAddItem')[0].addEventListener("click", () => {
             this.model.getEmptyItem();
         });
 
-        document.getElementById("containerItemList").addEventListener("click", (event) => { /* bubbling */
+        $('#containerItemList')[0].addEventListener("click", (event) => { /* bubbling */
             const action = event.target.dataset.com_rst_note_action;
-            if(action != null && action==="DELETE")   {
-                this.model.deleteItem(parseInt(event.target.dataset.com_rst_note_idRow));
+            if (action != null && action === "DELETE") {
+                this.model.deleteItem(parseInt(event.target.dataset.com_rst_note_iditem));
             }
-            else if(action != null &&action==="UPDATE")   {
-                const item =  this.model.getItem(parseInt(event.target.dataset.com_rst_note_idRow));
+            else if (action != null && action === "UPDATE") {
+                const item = this.model.getItem(parseInt(event.target.dataset.com_rst_note_iditem));
                 this.model.setCurrentItem(item);
                 this.view.showEditDialog(item);
             }
-            else if(action != null &&action==="FINISH")   {
-                const idRow = parseInt(event.target.dataset.com_rst_note_idRow);
+            else if (action != null && action === "FINISH") {
+                const idRow = parseInt(event.target.dataset.com_rst_note_iditem);
                 const isFinished = this.model.isFinished(idRow);
                 this.model.setIsFinished(idRow, !isFinished);
-                this.view.setStyleToggleIsFinished(event.target, !isFinished);
             }
         });
 
-        document.getElementById("buttonDialogEditCancel").addEventListener("click", (event) => {
+        $('#buttonDialogEditCancel')[0].addEventListener("click", (event) => {
             event.preventDefault();//prevent fire onbeforeunload
             this.view.closeEditDialog();
         });
 
-        document.getElementById("buttonDialogErrorCancel").addEventListener("click", () => {
+        $('#buttonDialogErrorCancel')[0].addEventListener("click", () => {
             this.view.closeErrorDialog();
         });
 
-        document.getElementById("buttonChangeStyle").addEventListener("click", () => {
+        $('#buttonChangeStyle')[0].addEventListener("click", () => {
             this.view.toggleStyle();
             this.view.setStyle();
-
         });
 
-        document.getElementById("checkboxFinished").addEventListener("click", () => {
+        this.checkboxFilterFinished.addEventListener("click", () => {
             this.reloadItemList();
         });
 
-        document.getElementById("radioByFinished").addEventListener("click", () => {
-            this.model.sortByFinished();
+        this.radioByFinished.addEventListener("click", () => {
             this.reloadItemList();
         });
 
-        document.getElementById("radioByCreated").addEventListener("click", () => {
-            this.model.sortByCreated();
+        this.radioByCreated.addEventListener("click", () => {
             this.reloadItemList();
         });
 
-        document.getElementById("radioByImportance").addEventListener("click", () => {
-            this.model.sortByImportance();
+        this.radioByImportance.addEventListener("click", () => {
             this.reloadItemList();
         });
 
-        document.getElementById("dialogEdit").addEventListener("submit", (event) => {
+        $('#dialogEdit')[0].addEventListener("submit", (event) => {
             this.editDialogOkPressed(event);
         });
     }
 
     reloadItemList() {
-        const checked = document.getElementById("checkboxFinished").checked;
-        this.view.generateNoteItemList(this.model.getSelectedItems(checked));
+        if(this.radioByFinished.checked)    {
+            this.model.sortByFinished();
+        }
+        else if(this.radioByCreated.checked)    {
+            this.model.sortByCreated();
+        }
+        else if(this.radioByImportance.checked)    {
+            this.model.sortByImportance();
+        }
+        this.view.generateNoteItemList(this.model.getSelectedItems(this.checkboxFilterFinished.checked));
     }
 
     getItemList_JSON_call() {
@@ -91,7 +105,7 @@ class Controller {
     }
 
     putItemListEntryFinished_JSON_callback() {
-    //
+        this.reloadItemList();
     }
 
     deleteItemListEntry_JSON_callback() {
@@ -100,15 +114,13 @@ class Controller {
 
     ajaxError_callback(jqXHR, textStatus, errorThrown) {
         this.view.showErrorDialog("There's an issue with the backend. Please try again later");
-        /*
         throw {
             name: "AjaxException",
             message: textStatus,
             toString: function () {
-                return textStatus + " -> " + jqXHR.responseText;
+                return textStatus + " -> " + jqXHR.responseText + errorThrown.toString();
             }
         };
-        */
     }
 
     editDialogOkPressed(event) {

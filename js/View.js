@@ -2,11 +2,11 @@ class View {
     constructor(model) {
         this.LOCAL_STORAGE_STYLE = "com.rst.note.style";
         this.model = model;
-        this.editDialog = document.getElementById("dialogEdit");
-        this.errorDialog = document.getElementById("errorDialog");
-        this.errorDialogMessage = document.getElementById("errorDialogMessage");
-        this.containerItemList = document.getElementById("containerItemList");
-        this.containerInputsDialogEdit = document.getElementById("containerInputsDialogEdit");
+        this.editDialog = $('#dialogEdit')[0]; //real DOM-Object
+        this.errorDialog = $('#errorDialog')[0];
+        this.errorDialogMessage = $('#errorDialogMessage')[0];
+        this.containerItemList = $('#containerItemList')[0];
+        this.containerInputsDialogEdit = $('#containerInputsDialogEdit')[0];
         this.templateItemList = Handlebars.compile($("#itemList-template").html());
         this.templateDialogEdit = Handlebars.compile($("#dialogEdit-template").html());
         this.setStyle();
@@ -14,12 +14,10 @@ class View {
 
     generateNoteItemList(json) {
         this.containerItemList.innerHTML = this.templateItemList(json);
-        /* handlebars */
     }
 
     showEditDialog(json) {
-        document.getElementById("containerInputsDialogEdit").innerHTML = this.templateDialogEdit(json);
-        /* handlebars */
+        this.containerInputsDialogEdit.innerHTML = this.templateDialogEdit(json);
 
         try {
             this.editDialog.showModal();//works only in Chrome
@@ -29,12 +27,8 @@ class View {
     }
 
     updateModel() {
-        this.model.updateCurrentItem(document.getElementById("inputTitle").value
-            , document.getElementById("inputDescription").value
-            , document.getElementById("inputImportance").value
-            , document.getElementById("inputCompletedBy").value);
+        this.model.updateCurrentItem($('#inputTitle').val(), $('#inputDescription').val(), $('#inputImportance').val(), $('#inputCompletedBy').val());
     }
-
 
     showErrorDialog(message) {
         this.errorDialogMessage.innerHTML = message;
@@ -64,14 +58,6 @@ class View {
     toggleStyle() {
         const currentStyle = localStorage.getItem(this.LOCAL_STORAGE_STYLE);
         localStorage.setItem(this.LOCAL_STORAGE_STYLE, (currentStyle === "style1" ? "style2" : "style1"));
-    }
-
-    setStyleToggleIsFinished(togglebutton, isFinished) {
-        if (isFinished) {
-            togglebutton.style.color = "green";
-        } else {
-            togglebutton.style.color = "";
-        }
     }
 
 }
