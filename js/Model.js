@@ -1,70 +1,86 @@
 class Model {
     constructor(callbackHandler) {
         this.LIST_ITEM_ELEMENTS = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
-        this.callbackHandler = callbackHandler;
+        this.itemListJson = null;
+        this.currentItemJson = null;
 
-        this.restClientGET = new ARestClient(this.callbackHandler, "GET");
+        this.restClientGET = new ARestClient(callbackHandler, "GET");
         this.restClientGET.onSuccess = (json) => { /* override */
-            this.rowsJson = json.rows;
-            this.callbackHandler.getItemList_JSON_callback(this.rowsJson);
+            this.itemListJson = json.rows;
+            callbackHandler.getItemList_JSON_callback(this.itemListJson);
         };
 
-        this.restClientPUT_Row = new ARestClient(this.callbackHandler, "PUT");
-        this.restClientPUT_Row.onSuccess = (json) => { /* override */
-            this.callbackHandler.putItemListEntry_JSON_callback(json);
+        this.restClientGET_EmptyItem = new ARestClient(callbackHandler, "GET");
+        this.restClientGET_EmptyItem.onSuccess = (json) => { /* override */
+            callbackHandler.getEmptyItem_JSON_callback(json);
         };
 
-        this.restClientPUT_IsFinished = new ARestClient(this.callbackHandler, "PUT");
+        this.restClientPUT_Item = new ARestClient(callbackHandler, "PUT");
+        this.restClientPUT_Item.onSuccess = (json) => { /* override */
+            callbackHandler.putItemListEntry_JSON_callback(json);
+        };
+
+        this.restClientPUT_IsFinished = new ARestClient(callbackHandler, "PUT");
         this.restClientPUT_IsFinished.onSuccess = () => { /* override */
-            this.callbackHandler.putItemListEntryFinished_JSON_callback();
+            callbackHandler.putItemListEntryFinished_JSON_callback();
         };
 
-        this.restClientDELETE = new ARestClient(this.callbackHandler, "DELETE");
+        this.restClientDELETE = new ARestClient(callbackHandler, "DELETE");
         this.restClientDELETE.onSuccess = (json) => { /* override */
-            this.callbackHandler.deleteItemListEntry_JSON_callback(json);
+            callbackHandler.deleteItemListEntry_JSON_callback(json);
         };
     }
 
-    getItem(idRow) {
-        let row = null;
-        for (let i = 0; i < this.rowsJson.length; i++) {
-            if (this.rowsJson[i][this.LIST_ITEM_ELEMENTS[0]] === idRow) {
-                row = this.rowsJson[i];
+    getItem(idItem) {
+        let item = null;
+        for (let i = 0; i < this.itemListJson.length; i++) {
+            if (this.itemListJson[i][this.LIST_ITEM_ELEMENTS[0]] === idItem) {
+                item = this.itemListJson[i];
                 break;
             }
         }
-        return row;
+        return item;
+    }
+
+    getEmptyItem() {
+        this.restClientGET_EmptyItem.doRequest({
+            "emptyItem": "1"
+        });
+    }
+
+    setCurrentItem(item)    {
+        this.currentItemJson = item;
+    }
+
+    updateCurrentItem(title, description, importance, completedBy) {
+        this.currentItemJson[this.LIST_ITEM_ELEMENTS[1]] = title;
+        this.currentItemJson[this.LIST_ITEM_ELEMENTS[2]] = description;
+        this.currentItemJson[this.LIST_ITEM_ELEMENTS[3]] = importance;
+        this.currentItemJson[this.LIST_ITEM_ELEMENTS[4]] = completedBy;
     }
 
     getItemList() {
         this.restClientGET.doRequest(null);
     }
 
-    putItem(id, title, description, importance, completedBy, isFinished) {
-        this.restClientPUT_Row.doRequest({
-                "id": id,
-                "title": title,
-                "description": description,
-                "importance": importance,
-                "completedBy": completedBy,
-                "isFinished": isFinished,
-            }
-        );
+
+    putItem() {
+        this.restClientPUT_Item.doRequest(this.currentItemJson);
     }
 
-    deleteItem(idRow) {
+    deleteItem(idItem) {
         this.restClientDELETE.doRequest({
-            "id": idRow
+            "id": idItem
         });
     }
 
     getSelectedItems(finished) {
         const result = [];
         //performance++
-        for (let i = 0; i < this.rowsJson.length; i++) {
-            const isFinished = this.rowsJson[i][this.LIST_ITEM_ELEMENTS[5]];
+        for (let i = 0; i < this.itemListJson.length; i++) {
+            const isFinished = this.itemListJson[i][this.LIST_ITEM_ELEMENTS[5]];
             if (Boolean(isFinished === finished) || !finished) {
-                result.push(this.rowsJson[i]);
+                result.push(this.itemListJson[i]);
             }
         }
         return result;
@@ -72,9 +88,9 @@ class Model {
 
     isFinished(id) {
         let result = false;
-        for (let i = 0; i < this.rowsJson.length; i++) {
-            const row = this.rowsJson[i];
-            if (row[this.LIST_ITEM_ELEMENTS[0]] === id && row[this.LIST_ITEM_ELEMENTS[5]]) {
+        for (let i = 0; i < this.itemListJson.length; i++) {
+            const item = this.itemListJson[i];
+            if (item[this.LIST_ITEM_ELEMENTS[0]] === id && item[this.LIST_ITEM_ELEMENTS[5]]) {
                 result = true;
                 break;
             }
@@ -83,9 +99,9 @@ class Model {
     }
 
     setIsFinished(id, isFinished) {
-        for (let i = 0; i < this.rowsJson.length; i++) {
-            if (this.rowsJson[i][this.LIST_ITEM_ELEMENTS[0]] === id) {
-                this.rowsJson[i][this.LIST_ITEM_ELEMENTS[5]] = isFinished;
+        for (let i = 0; i < this.itemListJson.length; i++) {
+            if (this.itemListJson[i][this.LIST_ITEM_ELEMENTS[0]] === id) {
+                this.itemListJson[i][this.LIST_ITEM_ELEMENTS[5]] = isFinished;
                 break;
             }
         }
@@ -97,19 +113,19 @@ class Model {
     }
 
     sortByFinished() {
-        this.rowsJson.sort((a, b) => {
+        this.itemListJson.sort((a, b) => {
             return a[this.LIST_ITEM_ELEMENTS[4]] < b[this.LIST_ITEM_ELEMENTS[4]];
         });
     }
 
     sortByCreated() {
-        this.rowsJson.sort((a, b) => {
+        this.itemListJson.sort((a, b) => {
             return a[this.LIST_ITEM_ELEMENTS[6]] < b[this.LIST_ITEM_ELEMENTS[6]];
         });
     }
 
     sortByImportance() {
-        this.rowsJson.sort((a, b) => {
+        this.itemListJson.sort((a, b) => {
             return a[this.LIST_ITEM_ELEMENTS[3]] < b[this.LIST_ITEM_ELEMENTS[3]];
         });
     }
