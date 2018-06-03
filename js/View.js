@@ -2,45 +2,24 @@ class View {
     constructor(model) {
         this.LOCAL_STORAGE_STYLE = "com.rst.note.style";
         this.model = model;
-        this.editDialog = document.getElementById("editDialog");
+        this.editDialog = document.getElementById("dialogEdit");
         this.errorDialog = document.getElementById("errorDialog");
         this.errorDialogMessage = document.getElementById("errorDialogMessage");
-        this.idRow = -1;//there's no way to set an attribute in the dataset of the dialog. Don't wanna use a hidden field in dialog
-        this.inputTitle = document.getElementById("inputTitle");
-        this.inputDescription = document.getElementById("inputDescription");
-        this.inputImportance = document.getElementById("inputImportance");
-        this.inputCompletedBy = document.getElementById("inputCompletedBy");
-        this.noteItemContainer = document.getElementById("noteItemContainer");
-        this.initUI();
+        this.containerItemList = document.getElementById("containerItemList");
+        this.containerInputsDialogEdit = document.getElementById("containerInputsDialogEdit");
+        this.templateItemList = Handlebars.compile($("#itemList-template").html());
+        this.templateDialogEdit = Handlebars.compile($("#dialogEdit-template").html());
         this.setStyle();
     }
 
-    initUI() {
-        document.getElementById("inputCompletedBy").valueAsDate = new Date();//today as default
+    generateNoteItemList(json) {
+        this.containerItemList.innerHTML = this.templateItemList(json);
+        /* handlebars */
     }
 
-    getIsInsertUpdateModus() {
-        return this.isInsertUpdateModus;
-    }
-
-    /* handlebars */
-    generateNoteItemList(rowJson) {
-        this.noteItemContainer.innerHTML = null;
-        let source = $("#noteItem-template").html();
-        let template = Handlebars.compile(source);
-        this.noteItemContainer.innerHTML = template(rowJson);
-    }
-
-    showEditDialog(rowJSON) {
-        this.idRow = -1;//value for insert
-
-        if (rowJSON != null) {// Update; set the current values
-            this.idRow = rowJSON[this.model.LIST_ITEM_ELEMENTS[0]];
-            this.inputTitle.value = rowJSON[this.model.LIST_ITEM_ELEMENTS[1]];
-            this.inputDescription.value = rowJSON[this.model.LIST_ITEM_ELEMENTS[2]];
-            this.inputImportance.value = rowJSON[this.model.LIST_ITEM_ELEMENTS[3]];
-            this.inputCompletedBy.value = rowJSON[this.model.LIST_ITEM_ELEMENTS[4]];
-        }
+    showEditDialog(json) {
+        document.getElementById("containerInputsDialogEdit").innerHTML = this.templateDialogEdit(json);
+        /* handlebars */
 
         try {
             this.editDialog.showModal();//works only in Chrome
@@ -48,6 +27,14 @@ class View {
             this.editDialog.open();
         }
     }
+
+    updateModel() {
+        this.model.updateCurrentItem(document.getElementById("inputTitle").value
+            , document.getElementById("inputDescription").value
+            , document.getElementById("inputImportance").value
+            , document.getElementById("inputCompletedBy").value);
+    }
+
 
     showErrorDialog(message) {
         this.errorDialogMessage.innerHTML = message;

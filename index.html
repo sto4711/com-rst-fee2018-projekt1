@@ -19,15 +19,13 @@
 <header class="header">
     <div class="headerInfo">
         rst 06.2018 CAS FEE Project 1
-        word wrap position relative nok / import / onbeforeUnload
+        word wrap position relative nok / import
     </div>
-    <div class="headerToggleStyle">
-        <button id="changeStyleButton" class="button fa fa-paint-brush"></button>
-    </div>
+    <button id="buttonChangeStyle" class="button fa fa-paint-brush"></button>
 
     <h1 class="headerTitle">Notes</h1>
     <div class="headerButton">
-        <button id="addRecordButton" class="button fa fa-calendar-plus-o"></button>
+        <button id="buttonAddItem" class="button fa fa-calendar-plus-o"></button>
     </div>
     <div class="headerOrderBy">
         <input type="radio" id="radioByFinished"
@@ -41,80 +39,80 @@
         <label for="radioByImportance">By Importance</label>
     </div>
     <div class="headerFilter">
-        <input type="checkbox" id="finishedCheckbox">
-        <label for="finishedCheckbox">finished</label>
+        <input type="checkbox" id="checkboxFinished">
+        <label for="checkboxFinished">finished</label>
     </div>
 </header>
 
 <nav class="nav"></nav>
 
 <main class="main">
-    <div id="noteItemContainer" class="noteItemContainer">
+    <div id="containerItemList" class="containerItemList">
+        <script id="itemList-template" type="text/x-handlebars-template">
+            {{#each .}}
+            <div class="noteItem">
+                <div class="noteItem_Header">
+                    <button class="button fa fa-calendar-minus-o" data-com_rst_note_action="DELETE"
+                            data-com_rst_note_id-row="{{id}}"></button>
+                    <button class="button fa fa-edit" data-com_rst_note_action="UPDATE"
+                            data-com_rst_note_id-row="{{id}}"></button>
+                    <button class="button fa fa-check-square-o" data-com_rst_note_action="FINISH"
+                            data-com_rst_note_id-row="{{id}}"></button>
+                    <div class="noteItem_HeaderRight">
+                        {{#for_zero_to_n importance}}
+                        <i class="fa fa-flash"></i>
+                        {{/for_zero_to_n}}
+                    </div>
+                </div>
+                <div class="noteItem_Title"><H2>{{title}}</H2></div>
+                <div class="noteItem_Description">{{description}}</div>
+                <div class="noteItem_Footer">finished by {{completedBy}}
+                    <div class="noteItem_FooterRight">created {{created}}</div>
+                </div>
+            </div>
+            {{/each}}
+        </script>
     </div>
 </main>
-
-<aside class="aside"></aside>
 
 <footer class="footer"></footer>
 
 
-
-<script id="noteItem-template" type="text/x-handlebars-template">
-    {{#each .}}
-    <div class="noteItem">
-        <div class="noteItem_Header">
-            <button class="button fa fa-calendar-minus-o" data-com_rst_note_action="DELETE" data-com_rst_note_id-row="{{id}}"></button>
-            <button class="button fa fa-edit" data-com_rst_note_action="UPDATE" data-com_rst_note_id-row="{{id}}"></button>
-            <button class="button fa fa-check-square-o" data-com_rst_note_action="FINISH" data-com_rst_note_id-row="{{id}}"></button>
-            <div class="noteItem_HeaderRight">
-                {{#for_zero_to_n importance}}
-                <i class="fa fa-flash"></i>
-                {{/for_zero_to_n}}
-            </div>
-        </div>
-        <div class="noteItem_Title"><H2>{{title}}</H2></div>
-        <div class="noteItem_Description">{{description}}</div>
-        <div class="noteItem_Footer">created {{created}}
-            <div class="noteItem_FooterRight">
-                finished by {{completedBy}}
-            </div>
-        </div>
-    </div>
-    {{/each}}
-</script>
-
-
-<dialog id="editDialog" class="dialog">
+<dialog id="dialogEdit" class="dialog">
     <form>
-        <table>
-            <tr>
-                <td>Title</td>
-                <td>
-                    <input id="inputTitle" type="text" required>
-                </td>
-            </tr>
-            <tr>
-                <td>Description</td>
-                <td>
-                    <textarea id="inputDescription" rows="4" cols="50" required></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>Importance</td>
-                <td>
-                    <input id="inputImportance" type="range" min="1" max="5" step="1" value="1"/>
-            </tr>
-            <tr>
-                <td>Completed by</td>
-                <td>
-                    <input id="inputCompletedBy" type="date" required>
-                </td>
-            </tr>
-        </table>
+        <div id="containerInputsDialogEdit">
+            <script id="dialogEdit-template" type="text/x-handlebars-template">
+                <table>
+                    <tr>
+                        <td>Title</td>
+                        <td>
+                            <input id="inputTitle" type="text" value="{{title}}"required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td>
+                            <textarea id="inputDescription" rows="4" cols="50" required>{{description}}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Importance</td>
+                        <td>
+                            <input id="inputImportance" type="range" min="1" max="5" step="1" value="{{importance}}"/>
+                    </tr>
+                    <tr>
+                        <td>Completed by</td>
+                        <td>
+                            <input id="inputCompletedBy" type="date" value={{completedBy}} required>
+                        </td>
+                    </tr>
+                </table>
+            </script>
+        </div>
         <menu>
-            <button id="editDialogSubmitButton" type="submit" class="button fa fa-check-square-o"></button>
-            <button id="editDialogResetButton" type="reset" class="button fa fa-eraser"></button>
-            <button id="editDialogCancelButton" type="reset" class="button fa fa-close"></button>
+            <button id="buttonDialogEditSubmit" type="submit" class="button fa fa-check-square-o"></button>
+            <button type="reset" class="button fa fa-eraser"></button>
+            <button id="buttonDialogEditCancel" class="button fa fa-close"></button>
         </menu>
     </form>
 </dialog>
@@ -122,7 +120,7 @@
 <dialog id="dialog">
     <p id="errorDialogMessage">Greetings, one and all!</p>
     <menu>
-        <button id="errorDialogSubmitButton" type="submit" class="fa fa-check-square-o"></button>
+        <button id="buttonDialogErrorCancel" type="cancel" class="fa fa-check-square-o"></button>
     </menu>
 </dialog>
 

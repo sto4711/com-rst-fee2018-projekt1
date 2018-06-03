@@ -3,7 +3,7 @@
  */
 class ARestClient {
     constructor(errorCallbackHandler, ajaxType = "PLEASE DEFINE AJAX TYPE") {
-        this.URL_REST_NOTE = 'http://localhost:8080/com-rst-fee2018-projekt1-rest/note';
+        this.URL_REST_NOTE = 'http://localhost:8081/com-rst-fee2018-projekt1-rest/note';
         this.errorCallbackHandler = errorCallbackHandler;
         this.ajaxType = ajaxType;
         // if (this instanceof ARestClient) {

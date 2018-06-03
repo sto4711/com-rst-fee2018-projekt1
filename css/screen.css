@@ -4,6 +4,7 @@
     --baseColor: var(--baseColorStyle1);
     --baseColorHover: orange;
     --baseButtonFontSize: 24px;
+    --baseButtonFontSizeSmall  : 15px;
 }
 
 .body {
@@ -28,7 +29,7 @@
     left: 5px;
 }
 
-.headerToggleStyle {
+#buttonChangeStyle {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -44,24 +45,15 @@
     padding-top: 5px;
 }
 
-.nav {
-    flex-grow: 1;
-    background: mediumturquoise;
-}
-
 .main {
     flex-grow: 5;
-}
-
-.aside {
-    flex-grow: 0;
 }
 
 .footer {
     flex-basis: 100%;
 }
 
-.noteItemContainer {
+.containerItemList {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -77,13 +69,13 @@
 }
 .noteItem_Header {
     display: flex;
-    font-size: var(--baseButtonFontSize);
 }
 
 /* flash */
 .noteItem_Header i {
     padding: 1px;
     color: gold;
+    font-size: var(--baseButtonFontSize);
 }
 
 .noteItem_HeaderRight {
