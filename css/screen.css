@@ -15,35 +15,34 @@
     color: var(--baseColor);
 }
 
-.header {
-    flex-basis: 100%;
-}
-
 .headerTitle {
-    text-align: center;
+    padding-right: 80px;
 }
 
-.headerInfo {
-    position: absolute;
-    top: 5px;
-    left: 5px;
+.containerHeader {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.headerItem {
+    display: inline-flex;
+    min-width: 310px;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 3px;
+    border: 1px solid white;
+    justify-content: center;
+    align-items: center;
 }
 
 #buttonChangeStyle {
-    position: absolute;
-    top: 5px;
-    right: 5px;
     font-size: var(--baseButtonFontSizeSmall);
 }
 
-.headerButton,
-.headerOrderBy,
-.headerFilter{
-    display: flex;
-    justify-content: center;
-    padding-bottom: 5px;
-    padding-top: 5px;
+#checkboxFilterFinishedLabel {
+    padding-right: 60px;
 }
+
 
 .main {
     flex-grow: 5;
@@ -51,21 +50,22 @@
 
 .footer {
     flex-basis: 100%;
+    padding: 5px;
+    margin-top: 10px;
+    font-size: 12px;
 }
 
 .containerItemList {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    min-width: 300px;
-    min-height: 100px;
 }
 .noteItem {
-    min-width: 300px;
-    min-height: 100px;
-    margin: 5px;
-    padding: 5px;
+    min-width: 310px;
+    margin: 3px;
+    padding: 3px;
     border: 1px solid darkgrey;
+    border-radius: 3px 3px 3px 3px;
 }
 .noteItem_Header {
     display: flex;
@@ -81,36 +81,35 @@
 .noteItem_HeaderRight {
     display: flex;
     position: relative;
-    top: 0px;
+    top: 0;
     left: 130px;
 }
 
 .noteItem_Title {
     padding: 5px;
     display: flex;
-    min-width: 300px;
 }
 
 .noteItem_Description {
     padding: 5px;
     display: flex;
     flex: 1;
-    flex-wrap: wrap;
-    justify-content:flex-start;
-    min-height: 70px;
+    max-width: 300px;
+    margin-bottom: 5px;
+
 }
 
 .noteItem_Footer {
     display: flex;
-    margin-left: 3px;
+    margin-left: 5px;
+    margin-top:  10px;
 }
 
 .noteItem_FooterRight {
     display: flex;
     position: relative;
-    left: 50px;
+    left: 47px;
 }
-
 
 .button {
     border: none;
@@ -119,8 +118,19 @@
     font-size: var(--baseButtonFontSize);
 }
 
-.button:hover {
+.buttonPressed {
+    border: none;
+    background-color: transparent;
+    color: forestgreen;
+    font-size: var(--baseButtonFontSize);
+}
+
+.button:hover{
     color: var(--baseColorHover);
+}
+
+.buttonPressed:hover {
+    color: red;
 }
 
 .dialog {

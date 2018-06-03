@@ -7,40 +7,34 @@
     <script src='./js/jquery-3.3.1.min.js'></script>
     <script src='./js/handlebars-v4.0.11.js'></script>
     <script src='js/HandlebarsHelper.js'></script>
-    <script src='./js/Logger.js'></script>
     <script src='js/ARestClient.js'></script>
     <script src='./js/Model.js'></script>
     <script src='./js/View.js'></script>
     <script src='./js/Controller.js'></script>
     <title>Notes</title>
 </head>
-<body class='body' onbeforeunload="return 'Are you sure?'">
-
-<header class="header">
-    <div class="headerInfo">
-        rst 06.2018 CAS FEE Project 1
-        word wrap position relative nok / import
-    </div>
-    <button id="buttonChangeStyle" class="button fa fa-paint-brush"></button>
-
-    <h1 class="headerTitle">Notes</h1>
-    <div class="headerButton">
+<body class='body'>
+<header class="containerHeader">
+    <div class="headerItem">
+        <h1 class="headerTitle">Notes</h1>
         <button id="buttonAddItem" class="button fa fa-calendar-plus-o"></button>
     </div>
-    <div class="headerOrderBy">
+    <div class="headerItem">
         <input type="radio" id="radioByFinished"
                name="contact" value="email" checked="checked">
-        <label for="radioByFinished">By finish Date</label>
+        <label class="labelHover"  for="radioByFinished">by finished</label>
         <input type="radio" id="radioByCreated"
                name="contact" value="phone">
-        <label for="radioByCreated">By created Date</label>
+        <label for="radioByCreated">by created</label>
         <input type="radio" id="radioByImportance"
                name="contact" value="mail">
-        <label for="radioByImportance">By Importance</label>
+        <label for="radioByImportance">by Importance</label>
     </div>
-    <div class="headerFilter">
-        <input type="checkbox" id="checkboxFinished">
-        <label for="checkboxFinished">finished</label>
+    <div class="headerItem">
+        <input type="checkbox" id="checkboxFilterFinished">
+        <label id="checkboxFilterFinishedLabel" for="checkboxFilterFinished">finished only</label>
+        <button id="buttonChangeStyle" class="button fa fa-paint-brush"></button>
+
     </div>
 </header>
 
@@ -53,40 +47,49 @@
             <div class="noteItem">
                 <div class="noteItem_Header">
                     <button class="button fa fa-calendar-minus-o" data-com_rst_note_action="DELETE"
-                            data-com_rst_note_id-row="{{id}}"></button>
+                            data-com_rst_note_iditem="{{id}}"></button>
                     <button class="button fa fa-edit" data-com_rst_note_action="UPDATE"
-                            data-com_rst_note_id-row="{{id}}"></button>
+                            data-com_rst_note_iditem="{{id}}"></button>
+                    {{#if isFinished}}
+                    <button class="buttonPressed fa fa-check-square-o" data-com_rst_note_action="FINISH"
+                            data-com_rst_note_iditem="{{id}}"></button>
+                    {{else}}
                     <button class="button fa fa-check-square-o" data-com_rst_note_action="FINISH"
-                            data-com_rst_note_id-row="{{id}}"></button>
+                            data-com_rst_note_iditem="{{id}}"></button>
+                    {{/if}}
                     <div class="noteItem_HeaderRight">
                         {{#for_zero_to_n importance}}
                         <i class="fa fa-flash"></i>
                         {{/for_zero_to_n}}
                     </div>
                 </div>
-                <div class="noteItem_Title"><H2>{{title}}</H2></div>
-                <div class="noteItem_Description">{{description}}</div>
                 <div class="noteItem_Footer">finished by {{completedBy}}
                     <div class="noteItem_FooterRight">created {{created}}</div>
                 </div>
+                <div class="noteItem_Title"><H2>{{title}}</H2></div>
+                <div class="noteItem_Description">{{description}}</div>
             </div>
             {{/each}}
         </script>
     </div>
 </main>
 
-<footer class="footer"></footer>
+<footer class="footer">rst 06.2018 CAS FEE Project 1 / Offene Fragen: import nötig; geht nicht mit Classes</footer>
 
 
 <dialog id="dialogEdit" class="dialog">
     <form>
         <div id="containerInputsDialogEdit">
             <script id="dialogEdit-template" type="text/x-handlebars-template">
+
+
+
+
                 <table>
                     <tr>
                         <td>Title</td>
                         <td>
-                            <input id="inputTitle" type="text" value="{{title}}"required>
+                            <input id="inputTitle" type="text" value="{{title}}" required>
                         </td>
                     </tr>
                     <tr>
@@ -101,7 +104,7 @@
                             <input id="inputImportance" type="range" min="1" max="5" step="1" value="{{importance}}"/>
                     </tr>
                     <tr>
-                        <td>Completed by</td>
+                        <td>Finished by</td>
                         <td>
                             <input id="inputCompletedBy" type="date" value={{completedBy}} required>
                         </td>
@@ -109,25 +112,21 @@
                 </table>
             </script>
         </div>
-        <menu>
+        <div>
             <button id="buttonDialogEditSubmit" type="submit" class="button fa fa-check-square-o"></button>
             <button type="reset" class="button fa fa-eraser"></button>
             <button id="buttonDialogEditCancel" class="button fa fa-close"></button>
-        </menu>
+        </div>
     </form>
 </dialog>
 
 <dialog id="dialog">
-    <p id="errorDialogMessage">Greetings, one and all!</p>
-    <menu>
-        <button id="buttonDialogErrorCancel" type="cancel" class="fa fa-check-square-o"></button>
-    </menu>
+    <h4 id="errorDialogMessage">Greetings, one and all!</h4>
+    <button id="buttonDialogErrorCancel" class="fa fa-check-square-o"></button>
 </dialog>
-
 
 <!--DOM is now fully loaded... -->
 <script>new Controller();</script>
-
 
 </body>
 </html>

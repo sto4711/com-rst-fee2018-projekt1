@@ -34,7 +34,7 @@ class ARestClient {
 
     /*  must be be overridden */
     onSuccess(dataJson) {
-        Logger.debugConsole("ARestClient.onSuccess() -> must be overridden");
+        console.debug("ARestClient.onSuccess() -> must be overridden");
     }
 
     onError(jqXHR, textStatus, errorThrown) {
