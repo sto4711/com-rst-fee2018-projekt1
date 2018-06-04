@@ -5,12 +5,12 @@
     --baseColorHover: orange;
     --baseButtonFontSize: 24px;
     --baseButtonFontSizeSmall  : 15px;
+    --baseFontSize: 15px;
+    --baseFontSizeSmall: 12px;
 }
 
 .body {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 11.0pt ;
+    font-size: var(--baseFontSize);
     font-family: 'Calibri', sans-serif;
     color: var(--baseColor);
 }
@@ -69,6 +69,7 @@
 }
 .noteItem_Header {
     display: flex;
+    margin-top: 5px;
 }
 
 /* flash */
@@ -86,7 +87,7 @@
 }
 
 .noteItem_Title {
-    padding: 5px;
+    padding-left: 5px;
     display: flex;
 }
 
@@ -103,12 +104,13 @@
     display: flex;
     margin-left: 5px;
     margin-top:  10px;
+    font-size: var(--baseFontSizeSmall);
 }
 
 .noteItem_FooterRight {
     display: flex;
     position: relative;
-    left: 47px;
+    left: 92px;
 }
 
 .button {
