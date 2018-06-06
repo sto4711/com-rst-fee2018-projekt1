@@ -35,6 +35,27 @@
     align-items: center;
 }
 
+.containerDialog {
+    align-items: stretch;
+    min-width: 200px;
+    max-width: 273px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 5px;
+}
+
+.dialogItem {
+    display: flex;
+    padding-top: 5px;
+    align-items: flex-start;
+}
+
+.dialogItem label {
+    padding-left: 10px;
+    display:block; float:left;
+    min-width: 80px;
+}
+
 #buttonChangeStyle {
     font-size: var(--baseButtonFontSizeSmall);
 }
@@ -42,7 +63,6 @@
 #checkboxFilterFinishedLabel {
     padding-right: 60px;
 }
-
 
 .main {
     flex-grow: 5;

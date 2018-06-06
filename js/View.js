@@ -1,3 +1,4 @@
+/* import * as Handlebars from './js/handlebars-v4.0.11.js'; */
 class View {
     constructor(model) {
         this.LOCAL_STORAGE_STYLE = "com.rst.note.style";
