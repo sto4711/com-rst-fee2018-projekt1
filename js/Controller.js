@@ -1,7 +1,5 @@
 class Controller {
     constructor() {
-
-
         this.model = new Model(this);//callbackhandler
         this.view = new View(this.model);
         this.radioByFinished = $('#radioByFinished')[0];
@@ -16,7 +14,6 @@ class Controller {
         document.onbeforeunload = function () {
             return 'Are you sure?';
         };
-
 
         $('#buttonAddItem')[0].addEventListener("click", () => {
             this.model.getEmptyItem();

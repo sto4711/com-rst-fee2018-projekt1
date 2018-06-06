@@ -20,14 +20,11 @@
         <button id="buttonAddItem" class="button fa fa-calendar-plus-o"></button>
     </div>
     <div class="headerItem">
-        <input type="radio" id="radioByFinished"
-               name="contact" value="email" checked="checked">
-        <label class="labelHover"  for="radioByFinished">finished</label>
-        <input type="radio" id="radioByCreated"
-               name="contact" value="phone">
+        <input type="radio" name="group1" id="radioByFinished" checked="checked">
+        <label class="labelHover" for="radioByFinished">finished</label>
+        <input type="radio" name="group1" id="radioByCreated">
         <label for="radioByCreated">created</label>
-        <input type="radio" id="radioByImportance"
-               name="contact" value="mail">
+        <input type="radio" name="group1" id="radioByImportance">
         <label for="radioByImportance">importance</label>
     </div>
     <div class="headerItem">
@@ -72,45 +69,34 @@
     </div>
 </main>
 
-<footer class="footer">rst 06.2018 CAS FEE Project 1 / Offene Fragen: import nötig; geht nicht mit Classes</footer>
+<footer class="footer">rst 06.2018 CAS FEE Project 1</footer>
 
 
 <dialog id="dialogEdit" class="dialog">
     <form>
         <div id="containerInputsDialogEdit">
             <script id="dialogEdit-template" type="text/x-handlebars-template">
-
-
-
-
-                <table>
-                    <tr>
-                        <td>Title</td>
-                        <td>
-                            <input id="inputTitle" type="text" value="{{title}}" required>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Description</td>
-                        <td>
-                            <textarea id="inputDescription" rows="4" cols="50" required>{{description}}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Importance</td>
-                        <td>
-                            <input id="inputImportance" type="range" min="1" max="5" step="1" value="{{importance}}"/>
-                    </tr>
-                    <tr>
-                        <td>Finished by</td>
-                        <td>
-                            <input id="inputCompletedBy" type="date" value={{completedBy}} required>
-                        </td>
-                    </tr>
-                </table>
+                <div class="containerDialog">
+                    <div class="dialogItem">
+                        <label for="inputTitle">title</label>
+                        <input type="text" id="inputTitle" maxlength="20">
+                    </div>
+                    <div class="dialogItem">
+                        <label for="inputDescription">description</label>
+                        <textarea id="inputDescription" rows="10" required>{{description}}</textarea>
+                    </div>
+                    <div class="dialogItem">
+                        <label for="inputImportance">importance</label>
+                        <input id="inputImportance" type="range" min="1" max="5" step="1" value="{{importance}}"/>
+                    </div>
+                    <div class="dialogItem">
+                        <label for="inputCompletedBy">finished by</label>
+                        <input id="inputCompletedBy" type="date" value={{completedBy}} required>
+                    </div>
+                </div>
             </script>
         </div>
-        <div>
+        <div class="containerDialog">
             <button id="buttonDialogEditSubmit" type="submit" class="button fa fa-check-square-o"></button>
             <button type="reset" class="button fa fa-eraser"></button>
             <button id="buttonDialogEditCancel" class="button fa fa-close"></button>
