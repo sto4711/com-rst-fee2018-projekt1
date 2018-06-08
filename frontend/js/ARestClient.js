@@ -1,4 +1,3 @@
-
 /*
  Abstract class
  Server Error 426: Update fails
