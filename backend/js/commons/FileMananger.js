@@ -1,24 +1,16 @@
 const fileSystem = require('fs');
 
-class FileMananger {
-    constructor() {
-
+module.exports = class FileMananger {
+    constructor(filePath = "PLEASE DEFINE FILE PATH") {
+        this.CHARACTER_ENCODING = "UTF8";
+        this.filePath = filePath;
     }
 
-    writeStringToFile(path, fileContent, callback) {
-        fileSystem.writeFile(path, fileContent, 'utf8', callback);
+    writeStringToFile(fileContent, callback) {
+        fileSystem.writeFile(this.filePath, fileContent, this.CHARACTER_ENCODING, callback);
+    }
 
+    getStringFromFile(callback) {
+        fileSystem.readFile(this.filePath, this.CHARACTER_ENCODING, callback);
     }
 }
-
-
-function callbackTest(err) {
-    if (err){
-        console.log('EXC ' + err);
-        throw err;
-    }
-    console.log('ok');
-}
-
-
-new FileMananger().writeStringToFile("C:\\temp\\NoteNew.json", "hallo moto4711",callbackTest );
