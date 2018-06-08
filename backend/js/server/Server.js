@@ -1,5 +1,5 @@
-const http = require('http');
 const express = require('express');
+const ModelNote = require('../model/ModelNote.js');
 
 class Server {
     constructor() {
@@ -8,6 +8,7 @@ class Server {
         this.ROUTE_NOTE = "/note";
         this.myServer        = express();
         this.routerNote = express.Router();
+        this.modelNote = new ModelNote();
         this.initRouter();
         this.start();
     }
@@ -22,6 +23,8 @@ class Server {
         this.myServer.use(this.ROUTE_NOTE, this.routerNote);
         this.myServer.listen(this.PORT);
         console.log("Server is running: http://" + this.HOSTNAME + ":" + this.PORT + this.ROUTE_NOTE);
+
+
     }
 }
 
