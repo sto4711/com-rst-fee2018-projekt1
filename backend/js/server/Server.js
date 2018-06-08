@@ -8,14 +8,18 @@ class Server {
         this.ROUTE_NOTE = "/note";
         this.myServer        = express();
         this.routerNote = express.Router();
-        this.modelNote = new ModelNote();
+        this.modelNote = new ModelNote(this);
         this.initRouter();
         this.start();
     }
 
     initRouter() {
         this.routerNote.get('/', (req, res) => {
-            res.json({ message: 'hooray! welcome to our api!' });
+            this.modelNote.getJsonData( (err, data) => {//must be refactored!!!
+                console.log("callback;")
+                res.json(data);
+                debugger;
+            });
         });
     }
 
@@ -24,8 +28,8 @@ class Server {
         this.myServer.listen(this.PORT);
         console.log("Server is running: http://" + this.HOSTNAME + ":" + this.PORT + this.ROUTE_NOTE);
 
-
     }
+
 }
 
 new Server();
