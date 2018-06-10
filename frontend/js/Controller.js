@@ -33,6 +33,7 @@ class Controller {
                 const idRow = parseInt(event.target.dataset.com_rst_note_iditem);
                 const isFinished = this.model.isFinished(idRow);
                 this.model.setIsFinished(idRow, !isFinished);
+                this.model.setIsFinished(idRow, !isFinished);
             }
         });
 
@@ -72,13 +73,13 @@ class Controller {
     }
 
     reloadItemList() {
-        if(this.radioByFinished.checked)    {
+        if (this.radioByFinished.checked) {
             this.model.sortByFinished();
         }
-        else if(this.radioByCreated.checked)    {
+        else if (this.radioByCreated.checked) {
             this.model.sortByCreated();
         }
-        else if(this.radioByImportance.checked)    {
+        else if (this.radioByImportance.checked) {
             this.model.sortByImportance();
         }
         this.view.generateNoteItemList(this.model.getSelectedItems(this.checkboxFilterFinished.checked));
@@ -98,6 +99,7 @@ class Controller {
     }
 
     putItemListEntry_JSON_callback() {
+        this.view.closeEditDialog();
         this.getItemList_JSON_call();
     }
 
@@ -110,12 +112,12 @@ class Controller {
     }
 
     ajaxError_callback(jqXHR, textStatus, errorThrown) {
-        this.view.showErrorDialog("There's an issue with the backend. Please try again later");
+        this.view.showErrorDialog("There's an issue with the backend: " + errorThrown.name + " -> " + errorThrown.message);
         throw {
-            name: "AjaxException",
-            message: textStatus,
+            name: errorThrown.name,
+            message: errorThrown.message,
             toString: function () {
-                return textStatus + " -> " + jqXHR.responseText + errorThrown.toString();
+                return errorThrown.name + " -> " + errorThrown.message;
             }
         };
     }
@@ -123,7 +125,6 @@ class Controller {
     editDialogOkPressed(event) {
         event.preventDefault();//prevent fire onbeforeunload
         this.view.updateModel();
-        this.view.closeEditDialog();
         this.model.putItem();
     }
 

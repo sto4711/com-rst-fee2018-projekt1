@@ -3,27 +3,29 @@
  Server Error 426: Update fails
  */
 class ARestClient {
-    constructor(errorCallbackHandler, ajaxType = "PLEASE DEFINE AJAX TYPE") {
-        this.URL_REST_NOTE = 'http://localhost:8080/com-rst-fee2018-projekt1-rest/note';
+    constructor(errorCallbackHandler, requestType = "PLEASE DEFINE AJAX TYPE",path) {
+        //this.URL_REST_NOTE = 'http://localhost:8080/com-rst-fee2018-projekt1-rest/note'; /* REST java, Tomcat */
+        this.URL_REST_NOTE = "http://localhost:3000/note";  /* REST node.js */
         this.errorCallbackHandler = errorCallbackHandler;
-        this.ajaxType = ajaxType;
+        this.requestType = requestType;
+        this.path = (path==null? "": path);
         // if (this instanceof ARestClient) {
         //     throw {
         //         name: "WrongInstanceofException",
-        //         message: "not allowed to instancing a abstract class",
+        //         message: "not allowed to instancing an abstract class",
         //         toString: function () {
-        //             return "not allowed to instancing a abstract class";
+        //             return "not allowed to instancing an abstract class";
         //         }
         //     };
         // }
     }
 
-    doRequest(dataJson) {
+    doRequest(dataJson, query ) {
         $.ajax({
-            type: this.ajaxType,
+            type: this.requestType,
             dataType: "json",
-            url: this.URL_REST_NOTE,
-            data: dataJson,
+            url: this.URL_REST_NOTE + this.path + (query!=null? "?" + query: ""),
+            data: (dataJson!=null? JSON.stringify(dataJson) : null),
             success: (json) => {
                 this.onSuccess(json);
             },

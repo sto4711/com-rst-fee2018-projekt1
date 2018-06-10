@@ -3,25 +3,25 @@ class Model {
         this.LIST_ITEM_ELEMENTS = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
         this.itemListJson = null;
         this.currentItemJson = null;
-        this.restClientGET = new ARestClient(callbackHandler, "GET");
-        this.restClientGET.onSuccess = (json) => { /* override */
-            this.itemListJson = json.rows;
+        this.restClientGET_AllItems = new ARestClient(callbackHandler, "GET", "");
+        this.restClientGET_AllItems.onSuccess = (json) => { /* override */
+            this.itemListJson = json;
             callbackHandler.getItemList_JSON_callback(this.itemListJson);
         };
-        this.restClientGET_EmptyItem = new ARestClient(callbackHandler, "GET");
+        this.restClientGET_EmptyItem = new ARestClient(callbackHandler, "GET","/empty");
         this.restClientGET_EmptyItem.onSuccess = (json) => { /* override */
             callbackHandler.getEmptyItem_JSON_callback(json);
         };
-        this.restClientPUT_Item = new ARestClient(callbackHandler, "PUT");
+        this.restClientPUT_Item = new ARestClient(callbackHandler, "PUT", "");
         this.restClientPUT_Item.onSuccess = (json) => { /* override */
             callbackHandler.putItemListEntry_JSON_callback(json);
         };
-        this.restClientPUT_IsFinished = new ARestClient(callbackHandler, "PUT");
-        this.restClientPUT_IsFinished.onSuccess = () => { /* override */
+        this.restClientPUT_Item_IsFinished = new ARestClient(callbackHandler, "PUT", "/isfinished");
+        this.restClientPUT_Item_IsFinished.onSuccess = () => { /* override */
             callbackHandler.putItemListEntryFinished_JSON_callback();
         };
-        this.restClientDELETE = new ARestClient(callbackHandler, "DELETE");
-        this.restClientDELETE.onSuccess = (json) => { /* override */
+        this.restClientDELETE_Item = new ARestClient(callbackHandler, "DELETE","");
+        this.restClientDELETE_Item.onSuccess = (json) => { /* override */
             callbackHandler.deleteItemListEntry_JSON_callback(json);
         };
     }
@@ -38,13 +38,15 @@ class Model {
     }
 
     getEmptyItem() {
-        this.restClientGET_EmptyItem.doRequest({
-            "emptyItem": "1"
-        });
+        this.restClientGET_EmptyItem.doRequest(null,null);
     }
 
     setCurrentItem(item) {
         this.currentItemJson = item;
+    }
+
+    getItemList() {
+        this.restClientGET_AllItems.doRequest(null,null);
     }
 
     updateCurrentItem(title, description, importance, completedBy) {
@@ -54,18 +56,12 @@ class Model {
         this.currentItemJson[this.LIST_ITEM_ELEMENTS[4]] = completedBy;
     }
 
-    getItemList() {
-        this.restClientGET.doRequest(null);
-    }
-
     putItem() {
-        this.restClientPUT_Item.doRequest(this.currentItemJson);
+        this.restClientPUT_Item.doRequest(null, "item=" + JSON.stringify(this.currentItemJson), );
     }
 
     deleteItem(idItem) {
-        this.restClientDELETE.doRequest({
-            "id": idItem
-        });
+        this.restClientDELETE_Item.doRequest(null, "id=" + idItem);
     }
 
     getSelectedItems(finished) {
@@ -100,11 +96,7 @@ class Model {
                 break;
             }
         }
-
-        this.restClientPUT_IsFinished.doRequest({
-            "id": id,
-            "isFinished": isFinished,
-        });
+        this.restClientPUT_Item_IsFinished.doRequest(null, "id=" + id + "&finished=" + isFinished);
     }
 
     sortByFinished() {

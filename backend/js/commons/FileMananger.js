@@ -6,11 +6,45 @@ module.exports = class FileMananger {
         this.filePath = filePath;
     }
 
-    writeStringToFile(fileContent, callback) {
-        fileSystem.writeFile(this.filePath, fileContent, this.CHARACTER_ENCODING, callback);
+    streamFile(serverResponse) {
+        let readStream = fileSystem.createReadStream(this.filePath, { encoding: this.CHARACTER_ENCODING });
+        readStream.on('close', () => {
+            serverResponse.end()
+        });
+        readStream.pipe(serverResponse);
     }
 
-    getStringFromFile(callback) {
-        fileSystem.readFile(this.filePath, this.CHARACTER_ENCODING, callback);
+    getJsonFromFile(callback) { /* ok for small files */
+        let readStream = fileSystem.createReadStream(this.filePath, { encoding: this.CHARACTER_ENCODING });
+        let chunks = [];
+
+        readStream.on('error', err => {
+            return callback(err);
+        });
+        readStream.on('data', chunk => {
+            chunks.push(chunk);
+        });
+        readStream.on('close', () => {
+            return callback(null, JSON.parse(chunks[0]));
+        });
     }
-}
+
+    writeJsonToFile(fileContent) {
+        var writeStream = fileSystem.createWriteStream(this.filePath, { encoding: this.CHARACTER_ENCODING });
+
+        writeStream.on('error', err => {
+            return err;
+        });
+
+        writeStream.write(fileContent);
+
+        writeStream.on('close', () => {
+            return null;
+        });
+        //fileSystem.writeFile(this.filePath, fileContent, this.CHARACTER_ENCODING, callback);
+    }
+
+
+
+
+};

@@ -74,14 +74,14 @@
 <footer class="footer">rst 06.2018 CAS FEE Project 1</footer>
 
 
-<dialog id="dialogEdit" class="dialog">
+<dialog id="dialogEdit" >
     <form>
         <div id="containerInputsDialogEdit">
             <script id="dialogEdit-template" type="text/x-handlebars-template">
                 <div class="containerDialog">
                     <div class="dialogItem">
                         <label for="inputTitle">title</label>
-                        <input type="text" id="inputTitle" maxlength="20">
+                        <input type="text" id="inputTitle" value="{{title}}" maxlength="20" >
                     </div>
                     <div class="dialogItem">
                         <label for="inputDescription">description</label>
@@ -106,8 +106,8 @@
     </form>
 </dialog>
 
-<dialog id="dialog">
-    <h4 id="errorDialogMessage">Greetings, one and all!</h4>
+<dialog id="dialogError">
+    <h4 id="dialogErrorMessage">Greetings, one and all!</h4>
     <button id="buttonDialogErrorCancel" class="fa fa-check-square-o"></button>
 </dialog>
 
