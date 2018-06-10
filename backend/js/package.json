@@ -1,7 +1,10 @@
 {
   "name": "fee2018_projekt1_backend",
+  "description": "backend mit node.js",
+  "repository": "npm/npm",
+  "license": "UNLICENSED",
   "version": "0.0.1",
   "dependencies": {
-    "express": "4.x"
+    "express": "4.16.3"
   }
 }

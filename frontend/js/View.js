@@ -4,8 +4,8 @@ class View {
         this.LOCAL_STORAGE_STYLE = "com.rst.note.style";
         this.model = model;
         this.editDialog = $('#dialogEdit')[0]; //real DOM-Object
-        this.errorDialog = $('#errorDialog')[0];
-        this.errorDialogMessage = $('#errorDialogMessage')[0];
+        this.dialogError = $('#dialogError')[0];
+        this.dialogErrorMessage = $('#dialogErrorMessage')[0];
         this.containerItemList = $('#containerItemList')[0];
         this.containerInputsDialogEdit = $('#containerInputsDialogEdit')[0];
         this.templateItemList = Handlebars.compile($("#itemList-template").html());
@@ -32,11 +32,11 @@ class View {
     }
 
     showErrorDialog(message) {
-        this.errorDialogMessage.innerHTML = message;
+        this.dialogErrorMessage.innerHTML = message;
         try {
-            this.errorDialog.showModal();
+            this.dialogError.showModal();
         } catch (e) {
-            this.errorDialog.open();
+            this.dialogError.open();
         }
     }
 
@@ -45,7 +45,7 @@ class View {
     }
 
     closeErrorDialog() {
-        this.errorDialog.close();
+        this.dialogError.close();
     }
 
     setStyle() {

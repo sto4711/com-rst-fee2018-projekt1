@@ -155,10 +155,14 @@
     color: red;
 }
 
-.dialog {
+#dialogEdit {
     color: var(--baseColor);
 }
 
-.dialog::backdrop {
-    background: rgba(66, 244, 66, 0.1);
+#dialogError {
+    color: grey;
+}
+
+dialog::backdrop {
+   background: rgba(192,192,192,0.02);
 }
