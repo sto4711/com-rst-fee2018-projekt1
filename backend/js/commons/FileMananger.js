@@ -1,4 +1,4 @@
-const fileSystem = require('fs');
+const fileSystemExtra = require('fs-extra');
 
 module.exports = class FileMananger {
     constructor(filePath = "PLEASE DEFINE FILE PATH") {
@@ -7,44 +7,60 @@ module.exports = class FileMananger {
     }
 
     streamFile(serverResponse) {
-        let readStream = fileSystem.createReadStream(this.filePath, { encoding: this.CHARACTER_ENCODING });
+        let readStream = fileSystemExtra.createReadStream(this.filePath, {encoding: this.CHARACTER_ENCODING});
         readStream.on('close', () => {
             serverResponse.end()
         });
         readStream.pipe(serverResponse);
     }
 
-    getJsonFromFile(callback) { /* ok for small files */
-        let readStream = fileSystem.createReadStream(this.filePath, { encoding: this.CHARACTER_ENCODING });
-        let chunks = [];
+    getJsonFromFileAsStream() {
+        return new Promise((resolve, reject) => {
+            let readStream = fileSystemExtra.createReadStream(this.filePath, {encoding: this.CHARACTER_ENCODING});
+            let fileContent = "";
 
-        readStream.on('error', err => {
-            return callback(err);
+            readStream.on("error", err => {
+                reject(err);
+            });
+            readStream.on("data", chunk => {
+                fileContent += chunk;
+            });
+            readStream.on("close", () => {
+                resolve(JSON.parse(fileContent));
+            });
+        })
+    }
+
+    getJsonFromFile() {
+        return new Promise((resolve, reject) => {
+            fileSystemExtra.readFile(this.filePath, this.CHARACTER_ENCODING)
+                .then((fileContent) => {
+                    resolve(JSON.parse(fileContent));
+                }).catch(function (e) {
+                reject(e);
+            });
+        })
+    }
+
+    writeJsonToFileAsStream(fileContent) {
+        let writeStream = fileSystemExtra.createWriteStream(this.filePath, {encoding: this.CHARACTER_ENCODING});
+        writeStream.on('error', err => {
+            return err;
         });
-        readStream.on('data', chunk => {
-            chunks.push(chunk);
-        });
-        readStream.on('close', () => {
-            return callback(null, JSON.parse(chunks[0]));
+        writeStream.write(fileContent);
+        writeStream.on('close', () => {
+            return null;
         });
     }
 
     writeJsonToFile(fileContent) {
-        var writeStream = fileSystem.createWriteStream(this.filePath, { encoding: this.CHARACTER_ENCODING });
-
-        writeStream.on('error', err => {
-            return err;
-        });
-
-        writeStream.write(fileContent);
-
-        writeStream.on('close', () => {
-            return null;
-        });
-        //fileSystem.writeFile(this.filePath, fileContent, this.CHARACTER_ENCODING, callback);
+        return new Promise((resolve, reject) => {
+            fileSystemExtra.writeFile(this.filePath, fileContent, this.CHARACTER_ENCODING)
+                .then(() => {
+                    resolve();
+                }).catch(function (e) {
+                reject(e);
+            });
+        })
     }
-
-
-
-
 };

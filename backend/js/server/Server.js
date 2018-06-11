@@ -6,7 +6,7 @@ class Server {
         this.HOSTNAME = "localhost";
         this.PORT = 3000;
         this.ROUTE_NOTE = "/note";
-        this.FEEDBACK = JSON.parse('{"ok": 1}');
+        this.FEEDBACK_OK = JSON.parse('{"ok": 1}');
         this.app = express();
         this.routerNote = express.Router();
         this.model = new Model();
@@ -14,7 +14,7 @@ class Server {
         this.start();
     }
 
-    initRoutes() {
+     initRoutes() {
         this.routerNote.get("/", (request, response) => {
             this.model.pipeItemList(response);
         });
@@ -22,30 +22,19 @@ class Server {
             response.json(this.model.getEmptyItem());
         });
 
-        this.routerNote.delete("/", (request, response) => {     /* DELETE ITEM */
-            const err = this.model.deleteItem(JSON.parse(request.query.id));
-            Server.checkThrowError(err, "delete");
-            response.json(this.FEEDBACK);
+        this.routerNote.delete("/", async (request, response) => {     /* DELETE ITEM */
+            const err = await this.model.deleteItem(JSON.parse(request.query.id));
+            response.json(this.createJsonFeedback(err, "delete"));
         });
 
         this.routerNote.put("/isfinished", (request, response) => {  /* UPDATE ITEM.isfinished */
             const err = this.model.updateItemIsFinished(JSON.parse(request.query.id), JSON.parse(request.query.finished));
-            Server.checkThrowError(err, "update isfinished");
-            response.json(this.FEEDBACK);
-            // this.model.updateItemIsFinished(JSON.parse(request.query.id), JSON.parse(request.query.finished), (err) => {//must be refactored!!!
-            //     Server.checkThrowError(err, "put ITEM.isfinished");
-            //     response.json(this.FEEDBACK);
-            // });
+            response.json(this.createJsonFeedback(err, "update isfinished"));
         });
 
         this.routerNote.put("/", (request, response) => {  /* MERGE ITEM */
             const err = this.model.mergeItem(JSON.parse(request.query.item));
-            Server.checkThrowError(err, "merge");
-            response.json(this.FEEDBACK);
-            //     this.model.mergeItem(JSON.parse(request.query.item), (err) => {//must be refactored!!!
-            //     Server.checkThrowError(err, "put ITEM");
-            //     response.json(this.FEEDBACK);
-            // });
+            response.json(this.createJsonFeedback(err, "merge"));
         });
     }
 
@@ -65,11 +54,13 @@ class Server {
         console.log("Server is running: http://" + this.HOSTNAME + ":" + this.PORT + this.ROUTE_NOTE);
     }
 
-    static checkThrowError(err, functionName) {
+    createJsonFeedback(err, functionName) {
         if (err) {
-            console.log(functionName + "(), Exc: " + err);
-            throw err;
+            const trace = functionName + "(), Exc: " + err;
+            console.log(trace);
+            return  JSON.parse('{"error": "'+ trace +'"}') ;
         }
+        return this.FEEDBACK_OK;
     }
 
 }
