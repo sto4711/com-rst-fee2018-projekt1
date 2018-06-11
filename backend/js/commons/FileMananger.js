@@ -14,22 +14,6 @@ module.exports = class FileMananger {
         readStream.pipe(serverResponse);
     }
 
-    getJsonFromFileAsStream() {
-        return new Promise((resolve, reject) => {
-            let readStream = fileSystemExtra.createReadStream(this.filePath, {encoding: this.CHARACTER_ENCODING});
-            let fileContent = "";
-
-            readStream.on("error", err => {
-                reject(err);
-            });
-            readStream.on("data", chunk => {
-                fileContent += chunk;
-            });
-            readStream.on("close", () => {
-                resolve(JSON.parse(fileContent));
-            });
-        })
-    }
 
     getJsonFromFile() {
         return new Promise((resolve, reject) => {
@@ -40,17 +24,6 @@ module.exports = class FileMananger {
                 reject(e);
             });
         })
-    }
-
-    writeJsonToFileAsStream(fileContent) {
-        let writeStream = fileSystemExtra.createWriteStream(this.filePath, {encoding: this.CHARACTER_ENCODING});
-        writeStream.on('error', err => {
-            return err;
-        });
-        writeStream.write(fileContent);
-        writeStream.on('close', () => {
-            return null;
-        });
     }
 
     writeJsonToFile(fileContent) {
