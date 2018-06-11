@@ -113,13 +113,13 @@ class Controller {
 
     ajaxError_callback(jqXHR, textStatus, errorThrown) {
         this.view.showErrorDialog("There's an issue with the backend: " + errorThrown.name + " -> " + errorThrown.message);
-        throw {
-            name: errorThrown.name,
-            message: errorThrown.message,
-            toString: function () {
-                return errorThrown.name + " -> " + errorThrown.message;
-            }
-        };
+        // throw {
+        //     name: errorThrown.name,
+        //     message: errorThrown.message,
+        //     toString: function () {
+        //         return errorThrown.name + " -> " + errorThrown.message;
+        //     }
+        // };
     }
 
     editDialogOkPressed(event) {
