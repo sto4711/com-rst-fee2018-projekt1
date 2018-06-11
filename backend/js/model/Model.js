@@ -40,48 +40,48 @@ module.exports = class Model {
         }
     }
 
-    updateItemIsFinished(id, isFinishedNew) {
-        this.fileMananger.getJsonFromFile()
-            .then(list => {
-                for (let i = 0; i < list.length; i++) {
-                    const currentId = list[i].id;
-                    if (currentId === id) {
-                        list[i].isFinished = isFinishedNew;
+    async updateItemIsFinished(id, isFinishedNew) {
+        try {
+            let fileContent = await this.fileMananger.getJsonFromFile();
+            for (let i = 0; i < fileContent.length; i++) {
+                const currentId = fileContent[i].id;
+                if (currentId === id) {
+                    fileContent[i].isFinished = isFinishedNew;
+                    break;
+                }
+                await this.fileMananger.writeJsonToFile(JSON.stringify(fileContent));
+            }
+            return null;
+        } catch (e) {
+            return e;
+        }
+    }
+
+    async mergeItem(itemJson) {
+        try {
+            let fileContent = await this.fileMananger.getJsonFromFile();
+            if (itemJson.id === -1) { // Insert
+                let newID = 0;
+                for (let i = 0; i < fileContent.length; i++) {
+                    if (fileContent[i].id > newID) {
+                        newID = fileContent[i].id;
+                    }
+                }
+                itemJson.id = ++newID;
+                fileContent.push(itemJson);
+            } else {   // Update
+                for (let i = 0; i < fileContent.length; i++) {
+                    if (fileContent[i].id === itemJson.id) {
+                        fileContent[i] = itemJson;
                         break;
                     }
                 }
-                return this.fileMananger.writeJsonToFile(JSON.stringify(list));
-            })
-            .catch(e => {
-                return e;
-            });
-    }
-
-    mergeItem(itemJson) {
-        this.fileMananger.getJsonFromFile()
-            .then(list => {
-                if (itemJson.id === -1) { // Insert
-                    let newID = 0;
-                    for (let i = 0; i < list.length; i++) {
-                        if (list[i].id > newID) {
-                            newID = list[i].id;
-                        }
-                    }
-                    itemJson.id = ++newID;
-                    list.push(itemJson);
-                } else {   // Update
-                    for (let i = 0; i < list.length; i++) {
-                        if (list[i].id === itemJson.id) {
-                            list[i] = itemJson;
-                            break;
-                        }
-                    }
-                }
-                return this.fileMananger.writeJsonToFile(JSON.stringify(list));
-            })
-            .catch(e => {
-                return e;
-            });
+            }
+            await this.fileMananger.writeJsonToFile(JSON.stringify(fileContent));
+            return null;
+        } catch (e) {
+            return e;
+        }
     }
 
 

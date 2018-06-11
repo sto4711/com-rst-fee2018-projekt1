@@ -27,13 +27,13 @@ class Server {
             response.json(this.createJsonFeedback(err, "delete"));
         });
 
-        this.routerNote.put("/isfinished", (request, response) => {  /* UPDATE ITEM.isfinished */
-            const err = this.model.updateItemIsFinished(JSON.parse(request.query.id), JSON.parse(request.query.finished));
+        this.routerNote.put("/isfinished", async (request, response) => {  /* UPDATE ITEM.isfinished */
+            const err = await this.model.updateItemIsFinished(JSON.parse(request.query.id), JSON.parse(request.query.finished));
             response.json(this.createJsonFeedback(err, "update isfinished"));
         });
 
-        this.routerNote.put("/", (request, response) => {  /* MERGE ITEM */
-            const err = this.model.mergeItem(JSON.parse(request.query.item));
+        this.routerNote.put("/", async (request, response) => {  /* MERGE ITEM */
+            const err = await this.model.mergeItem(JSON.parse(request.query.item));
             response.json(this.createJsonFeedback(err, "merge"));
         });
     }
