@@ -49,8 +49,8 @@ module.exports = class Model {
                     fileContent[i].isFinished = isFinishedNew;
                     break;
                 }
-                await this.fileMananger.writeJsonToFile(JSON.stringify(fileContent));
             }
+            await this.fileMananger.writeJsonToFile(JSON.stringify(fileContent));
             return null;
         } catch (e) {
             return e;
