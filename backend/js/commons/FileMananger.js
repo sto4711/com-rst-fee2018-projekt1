@@ -23,7 +23,7 @@ module.exports = class FileMananger {
                 }).catch(function (e) {
                 reject(e);
             });
-        })
+        });
     }
 
     writeJsonToFile(fileContent) {
@@ -34,6 +34,7 @@ module.exports = class FileMananger {
                 }).catch(function (e) {
                 reject(e);
             });
-        })
+        });
     }
+
 };
