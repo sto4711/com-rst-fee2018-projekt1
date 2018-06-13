@@ -32,7 +32,7 @@ class Server {
              response.json(this.createJsonFeedback(err, "update isfinished"));
          });
 
-        this.routerNote.put("/", async (request, response) => {  /* MERGE ITEM */
+        this.routerNote.post("/", async (request, response) => {  /* MERGE ITEM */
             const err = await this.model.mergeItem(JSON.parse(request.query.item));
             response.json(this.createJsonFeedback(err, "merge"));
         });
