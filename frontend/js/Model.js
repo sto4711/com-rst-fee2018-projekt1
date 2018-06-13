@@ -16,8 +16,8 @@ class Model {
         this.restClientPUT_Item.onSuccess = (json) => { /* override */
             callbackHandler.putItemListEntry_JSON_callback(json);
         };
-        this.restClientPUT_Item_IsFinished = new ARestClient(callbackHandler, "PUT", "/isfinished");
-        this.restClientPUT_Item_IsFinished.onSuccess = () => { /* override */
+        this.restClientPATCH_Item_IsFinished = new ARestClient(callbackHandler, "PATCH", "/isfinished");
+        this.restClientPATCH_Item_IsFinished.onSuccess = () => { /* override */
             callbackHandler.putItemListEntryFinished_JSON_callback();
         };
         this.restClientDELETE_Item = new ARestClient(callbackHandler, "DELETE","");
@@ -96,7 +96,7 @@ class Model {
                 break;
             }
         }
-        this.restClientPUT_Item_IsFinished.doRequest(null, "id=" + id + "&finished=" + isFinished);
+        this.restClientPATCH_Item_IsFinished.doRequest(null, "id=" + id + "&finished=" + isFinished);
     }
 
     sortByFinished() {

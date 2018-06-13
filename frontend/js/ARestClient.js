@@ -5,7 +5,7 @@
 class ARestClient {
     constructor(errorCallbackHandler, requestType = "PLEASE DEFINE AJAX TYPE",path) {
         //this.URL_REST_NOTE = 'http://localhost:8080/com-rst-fee2018-projekt1-rest/note'; /* REST java, Tomcat */
-        this.URL_REST_NOTE = "http://localhost:3000/note";  /* REST node.js */
+        this.URL_REST_NOTE = "http://localhost:3001/note";  /* REST node.js */
         this.errorCallbackHandler = errorCallbackHandler;
         this.requestType = requestType;
         this.path = (path==null? "": path);
