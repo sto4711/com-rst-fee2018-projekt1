@@ -12,8 +12,8 @@ class Model {
         this.restClientGET_EmptyItem.onSuccess = (json) => { /* override */
             callbackHandler.getEmptyItem_JSON_callback(json);
         };
-        this.restClientPUT_Item = new ARestClient(callbackHandler, "PUT", "");
-        this.restClientPUT_Item.onSuccess = (json) => { /* override */
+        this.restClientPOST_Item = new ARestClient(callbackHandler, "POST", "");
+        this.restClientPOST_Item.onSuccess = (json) => { /* override */
             callbackHandler.putItemListEntry_JSON_callback(json);
         };
         this.restClientPATCH_Item_IsFinished = new ARestClient(callbackHandler, "PATCH", "/isfinished");
@@ -57,7 +57,7 @@ class Model {
     }
 
     putItem() {
-        this.restClientPUT_Item.doRequest(null, "item=" + JSON.stringify(this.currentItemJson), );
+        this.restClientPOST_Item.doRequest(null, "item=" + JSON.stringify(this.currentItemJson), );
     }
 
     deleteItem(idItem) {
