@@ -53,7 +53,7 @@ module.exports = class Model {
                 }
             }
             await this.fileMananger.writeToFile(JSON.stringify(fileContent));
-            console.log("updated IsFinished");
+            console.log("updated IsFinished -> " + isFinishedNew);
             return null;
         } catch (e) {
             return e;
@@ -96,6 +96,5 @@ module.exports = class Model {
             return e;
         }
     }
-
 
 };
