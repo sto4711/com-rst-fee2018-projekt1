@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const Model = require("../model/Model.js");
 
-class Server {
+class Controller {
     constructor() {
         this.HOSTNAME = "localhost";
         this.PORT = 3000;
@@ -73,4 +73,4 @@ class Server {
 
 }
 
-new Server();
+new Controller();
