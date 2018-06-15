@@ -16,10 +16,12 @@ module.exports = class Model {
     }
 
     pipeItemList(serverResponse) {
+        console.log("get all");
         this.fileMananger.streamFile(serverResponse);
     }
 
     getEmptyItem() {
+        console.log("get empty one");
         return this.EMPTY_ITEM;
     }
 
@@ -33,7 +35,7 @@ module.exports = class Model {
                     fileContentNew.push(fileContent[i]);
                 }
             }
-            await this.fileMananger.writeJsonToFile(JSON.stringify(fileContentNew));
+            await this.fileMananger.writeToFile(JSON.stringify(fileContentNew));
             return null;
         } catch (e) {
             return e;
@@ -50,34 +52,45 @@ module.exports = class Model {
                     break;
                 }
             }
-            await this.fileMananger.writeJsonToFile(JSON.stringify(fileContent));
+            await this.fileMananger.writeToFile(JSON.stringify(fileContent));
+            console.log("updated IsFinished");
             return null;
         } catch (e) {
             return e;
         }
     }
 
-    async mergeItem(itemJson) {
+    async insertItem(itemJson) {
         try {
             let fileContent = await this.fileMananger.getJsonFromFile();
-            if (itemJson.id === -1) { // Insert
-                let newID = 0;
-                for (let i = 0; i < fileContent.length; i++) {
-                    if (fileContent[i].id > newID) {
-                        newID = fileContent[i].id;
-                    }
-                }
-                itemJson.id = ++newID;
-                fileContent.push(itemJson);
-            } else {   // Update
-                for (let i = 0; i < fileContent.length; i++) {
-                    if (fileContent[i].id === itemJson.id) {
-                        fileContent[i] = itemJson;
-                        break;
-                    }
+            let newID = 0;
+            for (let i = 0; i < fileContent.length; i++) {
+                if (fileContent[i].id > newID) {
+                    newID = fileContent[i].id;
                 }
             }
-            await this.fileMananger.writeJsonToFile(JSON.stringify(fileContent));
+            itemJson.id = ++newID;
+            fileContent.push(itemJson);
+            await this.fileMananger.writeToFile(JSON.stringify(fileContent));
+            console.log("inserted");
+            return null;
+        } catch (e) {
+            return e;
+        }
+    }
+
+    async updateItem(itemJson) {
+        try {
+            let fileContent = await this.fileMananger.getJsonFromFile();
+            const idUpdate = JSON.parse(itemJson.id);
+            for (let i = 0; i < fileContent.length; i++) {
+                if (fileContent[i].id === idUpdate) {
+                    fileContent[i] = itemJson;
+                    break;
+                }
+            }
+            await this.fileMananger.writeToFile(JSON.stringify(fileContent));
+            console.log("updated");
             return null;
         } catch (e) {
             return e;

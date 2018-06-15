@@ -33,7 +33,6 @@ class Controller {
                 const idRow = parseInt(event.target.dataset.com_rst_note_iditem);
                 const isFinished = this.model.isFinished(idRow);
                 this.model.setIsFinished(idRow, !isFinished);
-                this.model.setIsFinished(idRow, !isFinished);
             }
         });
 
@@ -98,12 +97,17 @@ class Controller {
         this.view.showEditDialog(item);
     }
 
+    postItemListEntry_JSON_callback() {
+        this.view.closeEditDialog();
+        this.getItemList_JSON_call();
+    }
+
     putItemListEntry_JSON_callback() {
         this.view.closeEditDialog();
         this.getItemList_JSON_call();
     }
 
-    putItemListEntryFinished_JSON_callback() {
+    patchItemListEntryFinished_JSON_callback() {
         this.reloadItemList();
     }
 
@@ -125,7 +129,7 @@ class Controller {
     editDialogOkPressed(event) {
         event.preventDefault();//prevent fire onbeforeunload
         this.view.updateModel();
-        this.model.putItem();
+        this.model.postPutItem();
     }
 
 }
