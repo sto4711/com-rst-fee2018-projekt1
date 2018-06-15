@@ -29,18 +29,11 @@ module.exports = class FileMananger {
             readStream.on("close", () => {
                 resolve(JSON.parse(fileContent));
             });
-            /* non stream approach */
-            // fileSystemExtra.readFile(this.filePath, this.CHARACTER_ENCODING)
-            //     .then((fileContent) => {
-            //         resolve(JSON.parse(fileContent));
-            //     }).catch(function (e) {
-            //     reject(e);
-            // });
         });
     }
 
     /* streams */
-    writeJsonToFile(fileContent) {
+    writeToFile(fileContent) {
         return new Promise((resolve, reject) => {
             let writeStream = fileSystemExtra.createWriteStream(this.filePath, {encoding: this.CHARACTER_ENCODING});
             writeStream.write(fileContent);
@@ -52,13 +45,6 @@ module.exports = class FileMananger {
             writeStream.on('close', () => {
                 resolve();
             });
-
-            /* non stream approach */
-            // fileSystemExtra.writeFile(this.filePath, fileContent, this.CHARACTER_ENCODING)
-            //     .then(() => {
-            //         resolve();
-            //     }).catch(function (e) {
-            //     reject(e);
         });
     }
 

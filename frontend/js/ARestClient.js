@@ -20,9 +20,11 @@ class ARestClient {
         // }
     }
 
+
     doRequest(dataJson, query ) {
         $.ajax({
             type: this.requestType,
+            contentType: "application/json; charset=utf-8",
             dataType: "json",
             url: this.URL_REST_NOTE + this.path + (query!=null? "?" + query: ""),
             data: (dataJson!=null? JSON.stringify(dataJson) : null),
