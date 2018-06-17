@@ -1,6 +1,6 @@
 class Model {
     constructor(callbackHandler) {
-        this.LIST_ITEM_ELEMENTS = ["id", "title", "description", "importance", "completedBy", "isFinished", "created"];
+        this.LIST_ITEM_ELEMENTS = ["_id", "title", "description", "importance", "completedBy", "isFinished", "created"];
         this.itemListJson = null;
         this.currentItemJson = null;
         this.restClientGET_AllItems = new ARestClient(callbackHandler, "GET", "");
@@ -8,7 +8,7 @@ class Model {
             this.itemListJson = json;
             callbackHandler.getItemList_JSON_callback(this.itemListJson);
         };
-        this.restClientGET_EmptyItem = new ARestClient(callbackHandler, "GET","");
+        this.restClientGET_EmptyItem = new ARestClient(callbackHandler, "GET", "");
         this.restClientGET_EmptyItem.onSuccess = (json) => { /* override */
             callbackHandler.getEmptyItem_JSON_callback(json);
         };
@@ -29,16 +29,16 @@ class Model {
             callbackHandler.patchItemListEntryFinished_JSON_callback();
         };
 
-        this.restClientDELETE_Item = new ARestClient(callbackHandler, "DELETE","");
+        this.restClientDELETE_Item = new ARestClient(callbackHandler, "DELETE", "");
         this.restClientDELETE_Item.onSuccess = (json) => { /* override */
             callbackHandler.deleteItemListEntry_JSON_callback(json);
         };
     }
 
-    getItem(idItem) {
+    getItem(_id) {
         let item = null;
         for (let i = 0; i < this.itemListJson.length; i++) {
-            if (this.itemListJson[i][this.LIST_ITEM_ELEMENTS[0]] === idItem) {
+            if (this.itemListJson[i][this.LIST_ITEM_ELEMENTS[0]] === _id) {
                 item = this.itemListJson[i];
                 break;
             }
@@ -47,7 +47,7 @@ class Model {
     }
 
     getEmptyItem() {
-        this.restClientGET_EmptyItem.doRequest(null,"empty=1");
+        this.restClientGET_EmptyItem.doRequest(null, "empty=1");
     }
 
     setCurrentItem(item) {
@@ -55,7 +55,7 @@ class Model {
     }
 
     getItemList() {
-        this.restClientGET_AllItems.doRequest(null,null);
+        this.restClientGET_AllItems.doRequest(null, null);
     }
 
     updateCurrentItem(title, description, importance, completedBy) {
@@ -66,17 +66,17 @@ class Model {
     }
 
     postPutItem() {
-        if(this.currentItemJson.id === -1)    {
+        if (this.currentItemJson[this.LIST_ITEM_ELEMENTS[0]] === undefined) {
             this.restClientPOST_Item.doRequest(this.currentItemJson, null);
-        }else   {
+        } else {
             this.restClientPUT_Item.doRequest(this.currentItemJson, null);
         }
     }
 
-    deleteItem(idItem) {
+    deleteItem(_id) {
         let json = {};
-        json.id = idItem;
-        this.restClientDELETE_Item.doRequest(json,null);
+        json[this.LIST_ITEM_ELEMENTS[0]] = _id;
+        this.restClientDELETE_Item.doRequest(json, null);
     }
 
     getSelectedItems(finished) {
@@ -91,11 +91,11 @@ class Model {
         return result;
     }
 
-    isFinished(id) {
+    isFinished(_id) {
         let result = false;
         for (let i = 0; i < this.itemListJson.length; i++) {
             const item = this.itemListJson[i];
-            if (item[this.LIST_ITEM_ELEMENTS[0]] === id && item[this.LIST_ITEM_ELEMENTS[5]]) {
+            if (item[this.LIST_ITEM_ELEMENTS[0]] === _id && item[this.LIST_ITEM_ELEMENTS[5]]) {
                 result = true;
                 break;
             }
@@ -103,19 +103,18 @@ class Model {
         return result;
     }
 
-    setIsFinished(id, isFinished) {
+    setIsFinished(_id, isFinished) {
         let json = {};
-        json.id = id;
+        json[this.LIST_ITEM_ELEMENTS[0]] = _id;
         json.value = isFinished;
 
         for (let i = 0; i < this.itemListJson.length; i++) {
             const item = this.itemListJson[i];
-            if (item[this.LIST_ITEM_ELEMENTS[0]] === id) {
+            if (item[this.LIST_ITEM_ELEMENTS[0]] === _id) {
                 item[this.LIST_ITEM_ELEMENTS[5]] = isFinished;
                 break;
             }
         }
-
         this.restClientPATCH_Item_IsFinished.doRequest(json, null);
     }
 
@@ -136,7 +135,7 @@ class Model {
     }
 
     sortByImportance() {
-        this.itemListJson=         this.itemListJson.sort((a, b) => {
+        this.itemListJson.sort((a, b) => {
             const x = a[this.LIST_ITEM_ELEMENTS[3]];
             const y = b[this.LIST_ITEM_ELEMENTS[3]];
             return ((x < y) ? 1 : ((x > y) ? -1 : 0));

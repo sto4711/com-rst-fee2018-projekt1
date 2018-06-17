@@ -1,6 +1,6 @@
-const fileSystemExtra = require('fs-extra');
+import * as fileSystemExtra from 'fs-extra';
 
-module.exports = class FileMananger {
+export class FileMananger {
     constructor(filePath = "PLEASE DEFINE FILE PATH") {
         this.CHARACTER_ENCODING = "UTF8";
         this.filePath = filePath;
@@ -13,6 +13,8 @@ module.exports = class FileMananger {
         });
         readStream.pipe(serverResponse);
     }
+
+
 
     /* streams */
     getJsonFromFile() {
@@ -47,5 +49,4 @@ module.exports = class FileMananger {
             });
         });
     }
-
-};
+}

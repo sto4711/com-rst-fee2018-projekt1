@@ -44,15 +44,15 @@
             <div class="noteItem">
                 <div class="noteItem_Header">
                     <button class="button fa fa-calendar-minus-o" data-com_rst_note_action="DELETE"
-                            data-com_rst_note_iditem="{{id}}"></button>
+                            data-com_rst_note_iditem="{{_id}}"></button>
                     <button class="button fa fa-edit" data-com_rst_note_action="UPDATE"
-                            data-com_rst_note_iditem="{{id}}"></button>
+                            data-com_rst_note_iditem="{{_id}}"></button>
                     {{#if isFinished}}
                     <button class="buttonPressed fa fa-check-square-o" data-com_rst_note_action="FINISH"
-                            data-com_rst_note_iditem="{{id}}"></button>
+                            data-com_rst_note_iditem="{{_id}}"></button>
                     {{else}}
                     <button class="button fa fa-check-square-o" data-com_rst_note_action="FINISH"
-                            data-com_rst_note_iditem="{{id}}"></button>
+                            data-com_rst_note_iditem="{{_id}}"></button>
                     {{/if}}
                     <div class="noteItem_HeaderRight">
                         {{#for_zero_to_n importance}}
@@ -107,7 +107,7 @@
 </dialog>
 
 <dialog id="dialogError">
-    <h4 id="dialogErrorMessage">Greetings, one and all!</h4>
+    <h4 id="dialogErrorMessage"></h4>
     <button id="buttonDialogErrorCancel" class="fa fa-check-square-o"></button>
 </dialog>
 
