@@ -22,17 +22,17 @@ class Controller {
         $('#containerItemList')[0].addEventListener("click", (event) => { /* bubbling */
             const action = event.target.dataset.com_rst_note_action;
             if (action != null && action === "DELETE") {
-                this.model.deleteItem(parseInt(event.target.dataset.com_rst_note_iditem));
+                this.model.deleteItem(event.target.dataset.com_rst_note_iditem);
             }
             else if (action != null && action === "UPDATE") {
-                const item = this.model.getItem(parseInt(event.target.dataset.com_rst_note_iditem));
+                const item = this.model.getItem(event.target.dataset.com_rst_note_iditem);
                 this.model.setCurrentItem(item);
                 this.view.showEditDialog(item);
             }
             else if (action != null && action === "FINISH") {
-                const idRow = parseInt(event.target.dataset.com_rst_note_iditem);
-                const isFinished = this.model.isFinished(idRow);
-                this.model.setIsFinished(idRow, !isFinished);
+                const _id = event.target.dataset.com_rst_note_iditem;
+                const isFinished = this.model.isFinished(_id);
+                this.model.setIsFinished(_id, !isFinished);
             }
         });
 
