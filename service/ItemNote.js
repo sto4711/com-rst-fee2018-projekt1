@@ -4,7 +4,7 @@ export class ItemNote {
         this.title = null;
         this.description = null;
         this.importance = 3;
-        this.created = new Date().toJSON().split('T')[0];
+        this.created = new Date().toLocaleString();
         this.completedBy = new Date().toJSON().split('T')[0];
         this.isFinished = false;
     }
