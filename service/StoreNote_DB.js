@@ -3,7 +3,7 @@ import {ItemNote} from "../service/ItemNote";
 
 export class StoreNote_DB {
     constructor() {
-        this.dbMananger = new DatabaseMananger("../data/note.db");
+        this.dbMananger = new DatabaseMananger("data/note.db");
     }
 
     async getItems() {
